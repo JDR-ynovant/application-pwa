@@ -1,4 +1,4 @@
-# application-pwa
+# JDR Ynovant
 
 ## Installation en local en version de production 
 
