@@ -15,7 +15,7 @@ export default {
 <style scoped>
 
 .cell {
-  background-image: url("../assets/img/grass.png");
+  background-image: url("../../assets/img/grass.png");
   height : 100%;
   width : 100%;
 }
