@@ -2,8 +2,6 @@
   <div
       class="cell"
   ></div>
-
-
 </template>
 
 <script>
@@ -21,7 +19,9 @@ export default {
 }
 
 .cell:hover {
-  background-color : rgba(68,206,262,0.5);
-  border : 1px solid rgba(68,206,262,1);
+  background-color : rgba(146, 161, 228, 0.5);
+  background-image: none;
+  height : 98%;
+  width : 98%;
 }
 </style>
