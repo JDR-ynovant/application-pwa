@@ -1,16 +1,16 @@
 <template>
   <div id="page-home">
-    <img src="../assets/img/licorne.png" />
+    <img src="../assets/img/licorne.png" class="m-10"/>
     <t-button 
       label="Create a game"
-      @click=""
+      class="m-10"
     />
-    <span>Or ...</span>
+    <span class="m-10">Or ...</span>
     <t-button 
       label="Join a game"
-      @click=""
+      class="m-10"
     />
-    <img src="../assets/img/heart.png" />
+    <img src="../assets/img/heart.png" class="m-10"/>
   </div>
 </template>
 

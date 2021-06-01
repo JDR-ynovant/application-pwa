@@ -1,6 +1,11 @@
 <template>
   <div class="home">
-    <grid></grid>
+    <div class="menu-container">
+      
+    </div>
+    <div class="grid-container">
+      <grid></grid>
+    </div>
   </div>
 </template>
 
@@ -17,3 +22,10 @@ export default {
   },
 };
 </script>
+<style scoped>
+.grid-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>

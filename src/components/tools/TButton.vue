@@ -27,9 +27,9 @@ export default {
     color: black;
     justify-content: center;
     align-items: center;
-    font-size: inherit;
+    font-size: 1.2em;
     font-family: inherit;
-    padding: 4px;
+    padding: 10px;
     border: 0;
     border-radius: 10px;
 }
