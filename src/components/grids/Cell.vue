@@ -1,5 +1,13 @@
 <template>
-  <div class="cell"></div>
+  <div
+      :style="`background-image: url('${cellInfos.sprite}')`"
+      class="cell"
+  >
+    <div
+      v-if="isCoveredByObject"
+      :style="`background-image: url('${cellInfos.objet.sprite}')`"
+      class="covered"/>
+  </div>
 </template>
 
 <script>
@@ -12,13 +20,27 @@ export default {
       type: Object,
       required: true
     }
+  },
+  data: function () {
+    return {
+      cellStatus: constantes.cellStatus
+    };
+  },
+  computed: {
+    isCoveredByObject () {
+      return [
+        this.cellStatus.OBSTACLE,
+        this.cellStatus.JOUEUR,
+        this.cellStatus.OBJET
+      ].some((value) => this.cellInfos.status === value);
+    }
   }
 };
 </script>
 
 <style scoped>
+
 .cell {
-  background-image: url("/assets/img/grass.png");
   height: 100%;
   width: 100%;
 }
@@ -26,7 +48,13 @@ export default {
 .cell:hover {
   background-color: rgba(146, 161, 228, 0.5);
   background-image: none;
-  height : 98%;
-  width : 98%;
+  height: 98%;
+  width: 98%;
+}
+
+.covered {
+  position: absolute;
+  width: 50px;
+  height: 50px;
 }
 </style>

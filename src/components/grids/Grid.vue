@@ -39,10 +39,23 @@ export default {
   mounted () {
     for (let i = 0; i < this.nbRows; i++) {
       for (let j = 0; j < this.nbCols; j++) {
-        this.cells.push({
-          id: i * this.nbRows + j,
-          status: "EMPTY"
-        });
+        if (i+j % 10 === 1) {
+          this.cells.push({
+            id: i * this.nbRows + j,
+            status: constantes.cellStatus.OBSTACLE,
+            sprite: "/assets/img/grass.png",
+            objet: {
+              sprite: "/assets/img/obstacle.png"
+            }
+          });
+        }
+        else {
+          this.cells.push({
+            id: i * this.nbRows + j,
+            status: constantes.cellStatus.VIDE,
+            sprite: "/assets/img/grass.png"
+          });
+        }
       }
     }
   },
