@@ -1,7 +1,13 @@
 <template>
   <div
+      :style="`background-image: url('${cellInfos.sprite}')`"
       class="cell"
-  ></div>
+  >
+    <div 
+      v-if="isCoveredByObject" 
+      :style="`background-image: url('${cellInfos.objet.sprite}')`" 
+      class="covered"/>
+  </div>
 </template>
 
 <script>
@@ -14,14 +20,26 @@ export default {
       type: Object,
       required: true
     }
+  },
+  data: function () {
+    return {
+      cellStatus: constantes.cellStatus
+    };
+  },
+  computed: {
+    isCoveredByObject () {
+      return [
+        this.cellStatus.OBSTACLE, 
+        this.cellStatus.JOUEUR, 
+        this.cellStatus.OBJET
+      ].some((value) => this.cellInfos.status === value); 
+    }
   }
 };
 </script>
 
 <style scoped>
-
 .cell {
-  background-image: url("../../assets/img/grass.png");
   height : 100%;
   width : 100%;
 }
@@ -31,5 +49,11 @@ export default {
   background-image: none;
   height : 98%;
   width : 98%;
+}
+
+.covered {
+  position: absolute;
+  width: 50px;
+  height: 50px;
 }
 </style>
