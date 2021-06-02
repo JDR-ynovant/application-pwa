@@ -1,17 +1,26 @@
 <template>
-  <div class="grid" :style="layout">
-   <Cell v-for="i in nbCols*nbRows" :key="i"></Cell>
+  <div class="grid" :style="cssGridVariables">
+   <cell 
+      v-for="cell in cells" 
+      :key="cell.id" 
+      @click="handleClickOnCell(i)"
+      :cellInfos="cell"
+    >
+    </cell>
   </div>
 </template>
 
 <script>
 import Cell from "./Cell";
+import GridMixins from "@/mixins/GridMixins";
+import constantes from "@/consts.js";
 
 export default {
   name: "Grid",
   components: {
     Cell,
   },
+  mixins: [GridMixins],
   props: {
     nbCols : {
       type: Number,
@@ -22,17 +31,24 @@ export default {
       required: true
     }
   },
-  data: () => {
+  data: function () {
     return {
-      
+      cells: []
     };
   },
-  computed: {
-    layout(){
-      return {
-        "--nbCols" : this.nbCols,
-        "--nbRows" : this.nbRows
+  mounted () {
+    for (let i = 0; i < this.nbRows; i++) {
+      for (let j = 0; j < this.nbCols; j++) {
+        this.cells.push({
+          id: i * this.nbRows + j,
+          status: "EMPTY"
+        });
       }
+    }
+  },
+  methods: {
+    handleClickOnCell (key) {
+
     }
   }
 };
