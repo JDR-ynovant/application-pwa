@@ -3,9 +3,9 @@
       :style="`background-image: url('${cellInfos.sprite}')`"
       class="cell"
   >
-    <div 
-      v-if="isCoveredByObject" 
-      :style="`background-image: url('${cellInfos.objet.sprite}')`" 
+    <div
+      v-if="isCoveredByObject"
+      :style="`background-image: url('${cellInfos.objet.sprite}')`"
       class="covered"/>
   </div>
 </template>
@@ -29,10 +29,10 @@ export default {
   computed: {
     isCoveredByObject () {
       return [
-        this.cellStatus.OBSTACLE, 
-        this.cellStatus.JOUEUR, 
+        this.cellStatus.OBSTACLE,
+        this.cellStatus.JOUEUR,
         this.cellStatus.OBJET
-      ].some((value) => this.cellInfos.status === value); 
+      ].some((value) => this.cellInfos.status === value);
     }
   }
 };
@@ -55,5 +55,7 @@ export default {
   position: absolute;
   width: 50px;
   height: 50px;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 </style>
