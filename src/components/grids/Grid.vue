@@ -12,11 +12,18 @@ export default {
   components: {
     Cell,
   },
+  props: {
+    nbCols : {
+      type: Number,
+      required: true
+    },
+    nbRows: {
+      type: Number,
+      required: true
+    }
+  },
   data: () => {
-    return {
-      nbCols: 20,
-      nbRows: 10,
-    };
+    return {};
   },
   computed: {
     layout() {
