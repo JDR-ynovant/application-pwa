@@ -5,8 +5,16 @@
 </template>
 
 <script>
+import constantes from "@/consts.js";
+
 export default {
   name: "Cell",
+  props: {
+    cellInfos: {
+      type: Object,
+      required: true
+    }
+  }
 };
 </script>
 
