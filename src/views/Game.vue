@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <div class="menu-container">
-      
+      <t-button label="Retour" class="m-10" @click="$router.go(-1)"/>
     </div>
     <div class="grid-container">
       <grid></grid>
