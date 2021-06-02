@@ -67,7 +67,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style scope>
 .grid {
   display: grid;
   grid-template-columns: repeat(var(--nbCols), 50px);
