@@ -1,12 +1,12 @@
 <template>
   <div id="page-home">
     <img src="../assets/img/licorne.png" class="m-10"/>
-    <t-button 
+    <t-button
       label="Create a game"
       class="m-10"
     />
     <span class="m-10">Or ...</span>
-    <t-button 
+    <t-button
       label="Join a game"
       class="m-10"
     />
@@ -26,7 +26,7 @@ export default {
 </script>
 <style scoped>
   #page-home {
-    background-color: #FFB0B0;
+
     height: 100vh;
     display: flex;
     flex-direction: column;
