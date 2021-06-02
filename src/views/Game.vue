@@ -4,7 +4,7 @@
       <t-button label="Retour" class="m-10" @click="$router.go(-1)"/>
     </div>
     <div class="grid-container">
-      <grid></grid>
+      <grid :nbRows="36" :nbCols="36"></grid>
     </div>
   </div>
 </template>
