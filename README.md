@@ -6,6 +6,8 @@ Permet d'avoir en local une version permettant le test du service worker et de l
 
 Il faut avoir docker d'installer sur sa machine.
 
+Il faut lancer au moins un `yarn build`
+
 Il faut ensuite lancer : `docker-compose up` 
 
 On peut ensuite accéder à l'application à l'aide d'un navigateur sur l'url : `localhost`
