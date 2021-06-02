@@ -56,5 +56,7 @@ export default {
   position: absolute;
   width: 50px;
   height: 50px;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 </style>
