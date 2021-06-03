@@ -1,12 +1,10 @@
 <template>
-  <div
-      :style="`background-image: url('${cellInfos.sprite}')`"
-      class="cell"
-  >
+  <div :style="`background-image: url('${cellInfos.sprite}')`" class="cell">
     <div
       v-if="isCoveredByObject"
       :style="`background-image: url('${cellInfos.objet.sprite}')`"
-      class="covered"/>
+      class="covered"
+    />
   </div>
 </template>
 
@@ -18,37 +16,37 @@ export default {
   props: {
     cellInfos: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data: function () {
     return {
-      cellStatus: constantes.cellStatus
+      cellStatus: constantes.cellStatus,
     };
   },
   computed: {
-    isCoveredByObject () {
+    isCoveredByObject() {
       return [
         this.cellStatus.OBSTACLE,
         this.cellStatus.JOUEUR,
-        this.cellStatus.OBJET
+        this.cellStatus.OBJET,
       ].some((value) => this.cellInfos.status === value);
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
 .cell {
-  height : 100%;
-  width : 100%;
+  height: 100%;
+  width: 100%;
 }
 
 .cell:hover {
-  background-color : rgba(146, 161, 228, 0.5);
+  background-color: rgba(146, 161, 228, 0.5);
   background-image: none;
-  height : 98%;
-  width : 98%;
+  height: 98%;
+  width: 98%;
 }
 
 .covered {

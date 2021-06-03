@@ -1,6 +1,6 @@
 <template>
   <div class="grid" :style="layout">
-   <Cell v-for="i in nbCols*nbRows" :key="i"></Cell>
+    <Cell v-for="i in nbCols * nbRows" :key="i"></Cell>
   </div>
 </template>
 
@@ -14,18 +14,18 @@ export default {
   },
   data: () => {
     return {
-      nbCols : 20,
-      nbRows: 10
+      nbCols: 20,
+      nbRows: 10,
     };
   },
   computed: {
-    layout(){
+    layout() {
       return {
-        "--nbCols" : this.nbCols,
-        "--nbRows" : this.nbRows
-      }
-    }
-  }
+        "--nbCols": this.nbCols,
+        "--nbRows": this.nbRows,
+      };
+    },
+  },
 };
 </script>
 
