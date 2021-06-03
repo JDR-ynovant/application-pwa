@@ -3,7 +3,7 @@ name: candy-fight - cd
 on:
   workflow_run:
     workflows: ["candy-fight - ci"]
-    branches: [master]
+    branches: [main]
     types:
       - completed
 
