@@ -43,6 +43,7 @@
             type="number"
             name="nbPlayers"
             min="0"
+            max="5"
         />
       </p>
       <p>
@@ -78,7 +79,10 @@ export default {
         this.errors.push('Your name is required');
       }
       if (!this.nbPlayers) {
-        this.errors.push('N required.');
+        this.errors.push('number players is required.');
+      }
+      if (this.nbPlayers > 5 || this.nbPlayers < 0) {
+        this.errors.push('number players is not valid.');
       }
       e.preventDefault();
     }
