@@ -1,13 +1,11 @@
 <template>
-<p>grid incomming</p>
+  <p>grid incomming</p>
 </template>
 
 <script>
 export default {
-  name: "Grid"
-}
+  name: "Grid",
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
