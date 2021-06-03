@@ -15,7 +15,6 @@
           <li v-for="error in errors">{{ error }}</li>
         </ul>
       </p>
-
       <p>
         <input
             id="gameName"
@@ -27,14 +26,13 @@
       </p>
       <p>
         <input
-            id="pseudo"
-            v-model="pseudo"
+            id="name"
+            v-model="name"
             type="text"
-            name="pseudo"
+            name="name"
             placeholder="Your Name"
         />
       </p>
-
       <p>
         <label for="nbPlayers">Players max : </label>
         <input
@@ -47,7 +45,7 @@
         />
       </p>
       <p>
-        <button class="button" type="submit" value="Submit" >Submit</button>
+        <button class="button" type="submit" value="Submit" >Create the game</button>
       </p>
     </form>
   </div>
@@ -61,7 +59,7 @@ export default {
       errors: [],
       gameName: null,
       nbPlayers: null,
-      pseudo: null,
+      name: null,
     };
   },
   methods:{
@@ -69,13 +67,11 @@ export default {
       if (this.name && this.age) {
         return true;
       }
-
       this.errors = [];
-
       if (!this.gameName) {
         this.errors.push('Game name required.');
       }
-      if (!this.pseudo) {
+      if (!this.name) {
         this.errors.push('Your name is required');
       }
       if (!this.nbPlayers) {
