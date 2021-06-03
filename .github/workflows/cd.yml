@@ -39,7 +39,7 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          tags: ghcr.io/JDR-ynovant/candy-fight-spa:latest
+          tags: ghcr.io/jdr-ynovant/candy-fight-spa:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
 
