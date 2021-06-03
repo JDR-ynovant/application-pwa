@@ -26,12 +26,16 @@ export default {
   },
   data: function () {
     return {
-      informations: {}
+      informations: {},
+      currentTurn: 0,
+      currentPlayer: null,
     }
   },
   mounted () {
+    const characters = this.hydrateCharacters();
+    this.currentPlayer = characters[0];
     this.informations = {
-      characters: this.hydrateCharacters(),
+      characters: characters,
       objects: this.generateObject()
     }
   },
@@ -46,7 +50,22 @@ export default {
           inventory: [],
           x: 1,
           y: 3,
-          sprite: "/assets/img/character.png"
+          sprite: "/assets/img/character.png",
+          user: {
+            id: "<un super id>",
+            name: "kamhan",
+          }
+        },
+        {
+          bloodSugar: 0,
+          inventory: [],
+          x: 6,
+          y: 9,
+          sprite: "/assets/img/licorne.png",
+          user: {
+            id: "<un autre super id>",
+            name: "whisdom",
+          }
         }
       ]
     },
@@ -61,6 +80,14 @@ export default {
         })
       }
       return objects;
+    },
+    applyTurn () {
+      
+    },
+    applyAction () {
+      if (this.currentPlayer.user.id === this.$store.getCurrentUser().id) {
+        
+      }
     }
   }
 };
