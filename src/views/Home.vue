@@ -1,14 +1,10 @@
 <template>
   <div id="page-home">
-    <img src="../assets/img/licorne.png" class="m-10" />
+    <img src="/assets/img/licorne.png" class="m-10" />
     <t-button label="Create a game" class="m-10" />
     <span class="m-10">Or ...</span>
-    <t-button
-      label="Join a game"
-      class="m-10"
-      @click="$router.push({ name: 'Game' })"
-    />
-    <img src="../assets/img/heart.png" class="m-10" />
+    <t-button label="Join a game" class="m-10" @click="joinGame" />
+    <img src="/assets/img/heart.png" class="m-10" />
   </div>
 </template>
 
@@ -19,6 +15,12 @@ export default {
   name: "Home",
   components: {
     TButton,
+  },
+  methods: {
+    joinGame() {
+      this.$store.setCurrentUser();
+      this.$router.push({ name: "Game" });
+    },
   },
 };
 </script>
