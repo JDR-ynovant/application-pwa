@@ -7,6 +7,10 @@
       v-if="isCoveredByObject"
       :style="`background-image: url('${cellInfos.objet.sprite}')`"
       class="covered"/>
+    <div
+      v-if="isCoveredByJoueur"
+      :style="`background-image: url('${cellInfos.character.sprite}')`"
+      class="covered"/>
   </div>
 </template>
 
@@ -30,11 +34,13 @@ export default {
     isCoveredByObject () {
       return [
         this.cellStatus.OBSTACLE,
-        this.cellStatus.JOUEUR,
         this.cellStatus.OBJET
-      ].some((value) => this.cellInfos.status === value);
+      ].includes(this.cellInfos.status);
+    },
+    isCoveredByJoueur () {
+      return this.cellInfos.status === this.cellStatus.JOUEUR
     }
-  }
+  },
 };
 </script>
 
