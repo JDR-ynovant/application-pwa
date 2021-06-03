@@ -1,6 +1,6 @@
 <template>
   <div class="grid" :style="cssGridVariables">
-   <cell
+    <cell
       v-for="cell in cells"
       :key="cell.id"
       @click="handleClickOnCell(i)"
@@ -22,48 +22,45 @@ export default {
   },
   mixins: [GridMixins],
   props: {
-    nbCols : {
+    nbCols: {
       type: Number,
-      required: true
+      required: true,
     },
     nbRows: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   data: function () {
     return {
-      cells: []
+      cells: [],
     };
   },
-  mounted () {
+  mounted() {
     for (let i = 0; i < this.nbRows; i++) {
       for (let j = 0; j < this.nbCols; j++) {
-        if (i+j % 10 === 1) {
+        if (i + (j % 10) === 1) {
           this.cells.push({
             id: i * this.nbRows + j,
             status: constantes.cellStatus.OBSTACLE,
             sprite: "/assets/img/grass.png",
             objet: {
-              sprite: "/assets/img/obstacle.png"
-            }
+              sprite: "/assets/img/obstacle.png",
+            },
           });
-        }
-        else {
+        } else {
           this.cells.push({
             id: i * this.nbRows + j,
             status: constantes.cellStatus.VIDE,
-            sprite: "/assets/img/grass.png"
+            sprite: "/assets/img/grass.png",
           });
         }
       }
     }
   },
   methods: {
-    handleClickOnCell (key) {
-
-    }
-  }
+    handleClickOnCell() {},
+  },
 };
 </script>
 
