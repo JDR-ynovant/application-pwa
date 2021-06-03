@@ -1,9 +1,13 @@
 <template>
   <div class="home">
     <section class="menu-container">
-      <t-menu-item label="🔔" class="m-10" @click="openMenuContent('historique')"/>
-      <t-menu-item label="🧭" class="m-10" @click="openMenuContent('carte')"/>
-      <t-menu-item label="🏠" routeName="Home" class="m-10"/>
+      <t-menu-item
+        label="🔔"
+        class="m-10"
+        @click="openMenuContent('historique')"
+      />
+      <t-menu-item label="🧭" class="m-10" @click="openMenuContent('carte')" />
+      <t-menu-item label="🏠" routeName="Home" class="m-10" />
     </section>
     <div class="grid-container">
       <grid :nbRows="15" :nbCols="15" :informations="informations"></grid>
@@ -12,16 +16,13 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import Grid from "@/components/grids/Grid.vue";
-import TButton from "@/components/tools/TButton.vue";
 import TMenuItem from "@/components/tools/TMenuItem.vue";
 
 export default {
   name: "Game",
   components: {
     Grid,
-    TButton,
     TMenuItem,
   },
   data: function () {
@@ -29,21 +30,21 @@ export default {
       informations: {},
       currentTurn: 0,
       currentPlayer: null,
-    }
+    };
   },
-  mounted () {
+  mounted() {
     const characters = this.hydrateCharacters();
     this.currentPlayer = characters[0];
     this.informations = {
       characters: characters,
-      objects: this.generateObject()
-    }
+      objects: this.generateObject(),
+    };
   },
   methods: {
-    openMenuContent (name) {
-      console.log(name);  
+    openMenuContent(name) {
+      console.log(name);
     },
-    hydrateCharacters () {
+    hydrateCharacters() {
       return [
         {
           bloodSugar: 0,
@@ -54,7 +55,7 @@ export default {
           user: {
             id: "<un super id>",
             name: "kamhan",
-          }
+          },
         },
         {
           bloodSugar: 0,
@@ -65,31 +66,30 @@ export default {
           user: {
             id: "<un autre super id>",
             name: "whisdom",
-          }
-        }
-      ]
+          },
+        },
+      ];
     },
-    generateObject () {
+    generateObject() {
       let objects = [];
       for (let i = 0; i < 10; i++) {
         let x = Math.floor(Math.random() * 15);
         let y = Math.floor(Math.random() * 15);
         objects.push({
-          x,y,
-          sprite: "/assets/img/object.png"
-        })
+          x,
+          y,
+          sprite: "/assets/img/object.png",
+        });
       }
       return objects;
     },
-    applyTurn () {
-      
-    },
-    applyAction () {
+    applyTurn() {},
+    applyAction() {
       if (this.currentPlayer.user.id === this.$store.getCurrentUser().id) {
-        
+        // no-op
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

@@ -12,7 +12,7 @@ body {
   background-color: #ffb0b0;
 }
 
-.center-content{
+.center-content {
   height: 100vh;
   display: flex;
   flex-direction: column;

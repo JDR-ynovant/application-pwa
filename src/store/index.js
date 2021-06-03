@@ -5,17 +5,17 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    currentUser: null
+    currentUser: null,
   },
   getters: {
-    getCurrentUser (state) {
+    getCurrentUser(state) {
       return state.currentUser;
-    }
+    },
   },
   mutations: {
-    SET_CURRENT_USER (state, payload) {
+    SET_CURRENT_USER(state, payload) {
       state.currentUser = payload.user;
-    }
+    },
   },
   actions: {
     setCurrentUser({ commit }) {
@@ -25,12 +25,12 @@ export default new Vuex.Store({
           name: "kamhan",
           games: [
             // TODO: pensez à bien faire des référence
-            "<une reference à une partie>"
-          ]
-        }
-        commit('SET_CURRENT_USER')
-      }catch (e) {
-        console.log(e)
+            "<une reference à une partie>",
+          ],
+        };
+        commit("SET_CURRENT_USER", { user });
+      } catch (e) {
+        console.log(e);
       }
     },
   },

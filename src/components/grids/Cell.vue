@@ -1,16 +1,15 @@
 <template>
-  <div
-      :style="`background-image: url('${cellInfos.sprite}')`"
-      class="cell"
-  >
+  <div :style="`background-image: url('${cellInfos.sprite}')`" class="cell">
     <div
       v-if="isCoveredByObject"
       :style="`background-image: url('${cellInfos.objet.sprite}')`"
-      class="covered"/>
+      class="covered"
+    />
     <div
       v-if="isCoveredByJoueur"
       :style="`background-image: url('${cellInfos.character.sprite}')`"
-      class="covered"/>
+      class="covered"
+    />
   </div>
 </template>
 
@@ -22,30 +21,28 @@ export default {
   props: {
     cellInfos: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data: function () {
     return {
-      cellStatus: constantes.cellStatus
+      cellStatus: constantes.cellStatus,
     };
   },
   computed: {
-    isCoveredByObject () {
-      return [
-        this.cellStatus.OBSTACLE,
-        this.cellStatus.OBJET
-      ].includes(this.cellInfos.status);
+    isCoveredByObject() {
+      return [this.cellStatus.OBSTACLE, this.cellStatus.OBJET].includes(
+        this.cellInfos.status
+      );
     },
-    isCoveredByJoueur () {
-      return this.cellInfos.status === this.cellStatus.JOUEUR
-    }
+    isCoveredByJoueur() {
+      return this.cellInfos.status === this.cellStatus.JOUEUR;
+    },
   },
 };
 </script>
 
 <style scoped>
-
 .cell {
   height: 100%;
   width: 100%;
