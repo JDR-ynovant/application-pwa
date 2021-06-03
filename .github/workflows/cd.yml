@@ -26,11 +26,12 @@ jobs:
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
+
       - name: login to Github Container Registry
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
+          username: marmorag
           password: ${{ secrets.GHCR_TOKEN }}
 
       - name: build and push image
