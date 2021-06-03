@@ -6,7 +6,7 @@
     <t-button
       label="Join a game"
       class="m-10"
-      @click="$router.push({ name: 'Game' })"
+      @click="joinGame"
     />
     <img src="/assets/img/heart.png" class="m-10" />
   </div>
@@ -18,8 +18,14 @@ import TButton from "@/components/tools/TButton.vue";
 export default {
   name: "Home",
   components: {
-    TButton,
+    TButton
   },
+  methods: {
+    joinGame () {
+      this.$store.setCurrentUser();
+      this.$router.push({name: "Game"});
+    }
+  }
 };
 </script>
 <style scoped>
