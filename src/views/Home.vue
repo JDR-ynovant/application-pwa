@@ -1,17 +1,34 @@
 <template>
-  <div class="home">
-    <Grid></Grid>
+  <div id="page-home">
+    <img src="../assets/img/licorne.png" class="m-10" />
+    <t-button label="Create a game" class="m-10" />
+    <span class="m-10">Or ...</span>
+    <t-button
+      label="Join a game"
+      class="m-10"
+      @click="$router.push({ name: 'Game' })"
+    />
+    <img src="../assets/img/heart.png" class="m-10" />
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import Grid from "@/components/Grid.vue";
+import TButton from "@/components/tools/TButton.vue";
 
 export default {
   name: "Home",
   components: {
-    Grid,
+    TButton,
   },
 };
 </script>
+<style scoped>
+#page-home {
+  background-color: #ffb0b0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+</style>

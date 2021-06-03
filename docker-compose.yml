@@ -1,0 +1,9 @@
+version: '3.7' 
+services: 
+    http: 
+        image: nginx
+        volumes:
+            - ./nginx.conf:/etc/nginx/conf.d/default.conf
+            - ./dist:/var/www/app
+        ports:
+            - 80:80
