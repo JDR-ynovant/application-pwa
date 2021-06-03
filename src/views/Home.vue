@@ -1,5 +1,5 @@
 <template>
-  <div id="page-home">
+  <div id="page-home" class="center-content">
     <img src="../assets/img/licorne.png" class="m-10"/>
     <t-button
       label="Create a game"
@@ -25,12 +25,4 @@ export default {
 };
 </script>
 <style scoped>
-  #page-home {
-
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
 </style>

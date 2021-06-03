@@ -1,22 +1,26 @@
 <template>
-  <div id="page-home">
+  <div class="center-content">
     <img src="../assets/img/licorne.png" class="m-10"/>
     <t-button
-        label="Create a game"
+        label="Add a player"
         class="m-10"
     />
-    <span class="m-10">Or ...</span>
+
     <t-button
-        label="Join a game"
+        label="Start Game"
         class="m-10"
     />
-    <img src="../assets/img/heart.png" class="m-10"/>
   </div>
 </template>
 
 <script>
+import TButton from "@/components/tools/TButton.vue";
+
 export default {
-  name: "Create"
+  name: "Create",
+  components: {
+    TButton
+  }
 }
 </script>
 
