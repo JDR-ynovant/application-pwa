@@ -1,5 +1,5 @@
 <template>
-  <div :style="`background-image: url('${cellInfos.sprite}')`" class="cell" @click="$emit('click')">
+  <div :id="`cell-${cellInfos.id}`" :style="`background-image: url('${cellInfos.sprite}')`" class="cell" @click="$emit('click')">
     <div
       v-if="isCoveredByObject"
       :style="`background-image: url('${cellInfos.objet.sprite}')`"

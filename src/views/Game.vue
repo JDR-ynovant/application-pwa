@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div id="game">
     <section class="menu-container">
       <t-menu-item
         label="🔔"
@@ -11,8 +11,8 @@
     </section>
     <div class="grid-container">
       <grid 
-        :nbRows="15" 
-        :nbCols="15" 
+        :nbRows="20" 
+        :nbCols="20" 
         :informations="informations"
         @click-on-cell="clickOnCell"
       />
@@ -95,27 +95,34 @@ export default {
           mode: constantes.playerModes.DEPLACEMENT
         },
       ];
-      characters.forEach((character) => {
+      characters.forEach((character,i) => {
         const index = this.getCellIndexAtCoordinate(
           character.x,
           character.y
         );
         this.informations.grid.cells[index].character = character;
         this.informations.grid.cells[index].status = constantes.cellStatus.JOUEUR;
+        if (this.currentPlayerIndex === i) {
+          this.moveView(index);
+        }
       });
-      this.currentPlayer = characters[this.currentPlayerIndex]
+      this.currentPlayer = characters[this.currentPlayerIndex];
       return characters;
+    },
+    moveView (index) {
+      const cell = document.getElementById(`cell-${this.informations.grid.cells[index].id}`);
+      cell.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
     },
     generateObject() {
       let objects = [];
       for (let i = 0; i < 10; i++) {
-        const x = Math.floor(Math.random() * 15);
-        const y = Math.floor(Math.random() * 15);
+        const x = Math.floor(Math.random() * 20);
+        const y = Math.floor(Math.random() * 20);
         if (
             x === 0 ||
             y === 0 ||
-            x === 15 - 1 ||
-            y === 15 - 1
+            x === 20 - 1 ||
+            y === 20 - 1
           ) break;
         const sprite = "/assets/img/object.png";
         objects.push({x,y,sprite});
@@ -127,17 +134,17 @@ export default {
     },
     generateGrid () {
       let cells = [];
-      for (let i = 0; i < 15; i++) {
-        for (let j = 0; j < 15; j++) {
+      for (let i = 0; i < 20; i++) {
+        for (let j = 0; j < 20; j++) {
           if (
             i === 0 ||
             j === 0 ||
-            i === 15 - 1 ||
-            j === 15 - 1
+            i === 20 - 1 ||
+            j === 20 - 1
           ) {
-            cells.push(this.hydrateCell(i * 15 + j, constantes.cellStatus.OBSTACLE, {x: i, y: j}));
+            cells.push(this.hydrateCell(i * 20 + j, constantes.cellStatus.OBSTACLE, {x: i, y: j}));
           } else {
-            cells.push(this.hydrateCell(i * 15 + j, constantes.cellStatus.VIDE, {x: i, y: j}));
+            cells.push(this.hydrateCell(i * 20 + j, constantes.cellStatus.VIDE, {x: i, y: j}));
           }
         }
       }
@@ -178,6 +185,10 @@ export default {
       }
       if (this.currentPlayer.user.id === this.currentUser.id) {
         if (type === constantes.actionTypes.DEPLACEMENT && cell) {
+          if (this.currentPlayer.mode !== constantes.playerModes.DEPLACEMENT) {
+            console.log("Vous n'êtes pas en mode deplacement");
+            return;
+          }
           if (cell.status === constantes.cellStatus.OBSTACLE || cell.status === constantes.cellStatus.JOUEUR) {
             console.log("vous ne pouvez pas vous deplacer sur cette case il y a un obstacle ou un joueur")
             return;
@@ -198,14 +209,18 @@ export default {
             type: constantes.actionTypes.DEPLACEMENT,
             targetX: cell.x,
             targetY: cell.y,
-          })
+          });
+          this.moveView(selectedCellIndex);
         } else if (type === constantes.actionTypes.ATTAQUER) {
-          if (this.currentPlayer)
+          if (this.currentPlayer.mode !== constantes.playerModes.ATTAQUE) {
+            console.log("Vous n'êtes pas en mode attaque");
+            return;
+          } 
         }
       }
     },
     getCellIndexAtCoordinate(x, y) {
-      return x * 15 + y;
+      return x * 20 + y;
     },
   },
 };
