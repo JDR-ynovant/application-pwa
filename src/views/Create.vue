@@ -2,7 +2,7 @@
   <div class="center-content">
     <img src="../assets/img/licorne.png" class="m-10" />
 
-    <form id="app" @submit="checkForm" action="#" method="post">
+    <form id="app" @submit="checkForm">
       <div v-if="errors.length">
         <b>Please correct the following error(s):</b>
         <ul>
@@ -58,13 +58,20 @@ export default {
       gameName: null,
       nbPlayers: null,
       name: null,
+      newUser: null,
     };
   },
   methods: {
     checkForm: function (e) {
       if (this.name && this.nbPlayers && this.gameName) {
         //todo route au store pour créer un game + user
-        let User = { name: this.name };
+
+        axios
+          .post("https://candy-fight.marmog.cloud/api/users", {"name": this.name})
+          .then((response) => (this.newUser = response.data));
+
+        console.log(this.newUser);
+        //let User = { name: this.name };
         // let Game = {
         //   name: this.gameName,
         //   user: this.name,
