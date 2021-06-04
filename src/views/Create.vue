@@ -36,7 +36,7 @@
           v-model="nbPlayers"
           type="number"
           name="nbPlayers"
-          min="0"
+          min="2"
           max="5"
         />
       </p>
@@ -62,7 +62,15 @@ export default {
   },
   methods: {
     checkForm: function (e) {
-      if (this.name && this.age) {
+      if (this.name && this.nbPlayers && this.gameName) {
+        //todo route au store pour créer un game + user
+        let User = { name: this.name };
+        // let Game = {
+        //   name: this.gameName,
+        //   user: this.name,
+        // };
+
+        localStorage.setItem("User", User);
         return true;
       }
       this.errors = [];
@@ -75,7 +83,7 @@ export default {
       if (!this.nbPlayers) {
         this.errors.push("number players is required.");
       }
-      if (this.nbPlayers > 5 || this.nbPlayers < 0) {
+      if (this.nbPlayers > 5 || this.nbPlayers < 1) {
         this.errors.push("number players is not valid.");
       }
       e.preventDefault();
