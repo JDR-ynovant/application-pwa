@@ -80,7 +80,7 @@ export default {
             id: "<un super id>",
             name: "kamhan",
           },
-          isPlaying: true
+          mode: constantes.playerModes.DEPLACEMENT
         },
         {
           bloodSugar: 0,
@@ -92,7 +92,7 @@ export default {
             id: "<un autre super id>",
             name: "whisdom",
           },
-          isPlaying: false
+          mode: constantes.playerModes.DEPLACEMENT
         },
       ];
       characters.forEach((character) => {
@@ -111,6 +111,12 @@ export default {
       for (let i = 0; i < 10; i++) {
         const x = Math.floor(Math.random() * 15);
         const y = Math.floor(Math.random() * 15);
+        if (
+            x === 0 ||
+            y === 0 ||
+            x === 15 - 1 ||
+            y === 15 - 1
+          ) break;
         const sprite = "/assets/img/object.png";
         objects.push({x,y,sprite});
         const index = this.getCellIndexAtCoordinate(x, y);
@@ -166,14 +172,35 @@ export default {
       
     },
     applyAction(type, cell) {
+      if (this.currentTurn.nbActionsRestante === 0) {
+        console.log("vous n'avez plus d'actions");
+        return;
+      }
       if (this.currentPlayer.user.id === this.currentUser.id) {
         if (type === constantes.actionTypes.DEPLACEMENT && cell) {
+          if (cell.status === constantes.cellStatus.OBSTACLE || cell.status === constantes.cellStatus.JOUEUR) {
+            console.log("vous ne pouvez pas vous deplacer sur cette case il y a un obstacle ou un joueur")
+            return;
+          }
+          const oldCellIndex = this.getCellIndexAtCoordinate(this.currentPlayer.x, this.currentPlayer.y);
+          this.informations.grid.cells[oldCellIndex].character = null;
+          this.informations.grid.cells[oldCellIndex].status = constantes.cellStatus.VIDE;
+
+          const selectedCellIndex = this.informations.grid.cells.findIndex((c) => cell.id === c.id);
+          this.informations.grid.cells[selectedCellIndex].character = this.currentPlayer;
+          this.informations.grid.cells[selectedCellIndex].status = constantes.cellStatus.JOUEUR;
+
           const indexCurrentPlayer = this.informations.characters.findIndex((character) => this.currentPlayer.user.id === character.user.id);
           this.informations.characters[indexCurrentPlayer].x = cell.x;
           this.informations.characters[indexCurrentPlayer].y = cell.y;
-          
+          this.currentTurn.nbActionsRestante--;
+          this.currentTurn.actions.push({
+            type: constantes.actionTypes.DEPLACEMENT,
+            targetX: cell.x,
+            targetY: cell.y,
+          })
         } else if (type === constantes.actionTypes.ATTAQUER) {
-
+          if (this.currentPlayer)
         }
       }
     },

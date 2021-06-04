@@ -11,4 +11,8 @@ export default {
     DEPLACEMENT: "DEPLACEMENT",
     PASSE: "PASSE",
   },
+  playerModes: {
+    ATTAQUE: "ATTAQUE",
+    DEPLACEMENT: "DEPLACEMENT",
+  }
 };
