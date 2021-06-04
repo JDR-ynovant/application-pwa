@@ -1,13 +1,17 @@
 <template>
-  <div :style="`background-image: url('${cellInfos.sprite}')`" class="cell">
+  <div :style="`background-image: url('${cellInfos.sprite}')`" class="cell" @click="$emit('click')">
     <div
       v-if="isCoveredByObject"
       :style="`background-image: url('${cellInfos.objet.sprite}')`"
       class="covered"
     />
     <div
-      v-if="isCoveredByJoueur"
+      v-else-if="isCoveredByJoueur"
       :style="`background-image: url('${cellInfos.character.sprite}')`"
+      class="covered"
+    />
+    <div 
+      v-else
       class="covered"
     />
   </div>
@@ -48,11 +52,10 @@ export default {
   width: 100%;
 }
 
-.cell:hover {
+.covered:hover {
   background-color: rgba(146, 161, 228, 0.5);
   background-image: none;
-  height: 98%;
-  width: 98%;
+  border: 2px solid rgb(46, 51, 73);
 }
 
 .covered {

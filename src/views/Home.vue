@@ -18,7 +18,7 @@ export default {
   },
   methods: {
     joinGame() {
-      this.$store.setCurrentUser();
+      this.$store.dispatch('setCurrentUser');
       this.$router.push({ name: "Game" });
     },
   },
