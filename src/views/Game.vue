@@ -247,6 +247,10 @@ export default {
             console.log("vous ne pouvez pas attaquer sur cette case il n'y a pas d'autres joueur sur cette case.")
             return;
           }
+
+          const selectedCellIndex = this.informations.grid.cells.findIndex((c) => cell.id === c.id);
+          this.informations.grid.cells[selectedCellIndex].character.bloodSugar++;
+
           this.currentTurn.actions.push({
             type: constantes.actionTypes.ATTAQUER,
             targetX: cell.x,
