@@ -17,6 +17,13 @@
         @click-on-cell="clickOnCell"
       />
     </div>
+    <div :class="{
+        'patoune': true,
+        'attaque': currentActionType === constantes.ATTAQUE,
+        'deplacement': currentActionType === constantes.DEPLACEMENT
+      }" 
+      @click="switchActionType"  
+    />
   </div>
 </template>
 
@@ -38,11 +45,16 @@ export default {
       objects: [],
     };
     return {
+      gameId: '<id de la game>',
       informations,
       currentTurn: this.hydrateTurn(),
       currentPlayer: null,
       currentPlayerIndex: 0,
-      currentActionStatus: constantes.actionTypes.DEPLACEMENT
+      currentActionType: constantes.actionTypes.DEPLACEMENT,
+      constantes: {
+        ATTAQUE: constantes.actionTypes.ATTAQUER,
+        DEPLACEMENT: constantes.actionTypes.DEPLACEMENT
+      }
     }
   },
   computed: {
@@ -59,6 +71,13 @@ export default {
     this.informations.objects = this.generateObject();
   },
   methods: {
+    switchActionType () {
+      if (this.currentActionType === constantes.actionTypes.ATTAQUER) {
+        this.currentActionType = constantes.actionTypes.DEPLACEMENT;
+      } else {
+        this.currentActionType = constantes.actionTypes.ATTAQUER;
+      }
+    },
     openMenuContent(name) {
       console.log(name);
     },
@@ -79,8 +98,7 @@ export default {
           user: {
             id: "<un super id>",
             name: "kamhan",
-          },
-          mode: constantes.playerModes.DEPLACEMENT
+          }
         },
         {
           bloodSugar: 0,
@@ -91,8 +109,7 @@ export default {
           user: {
             id: "<un autre super id>",
             name: "whisdom",
-          },
-          mode: constantes.playerModes.DEPLACEMENT
+          }
         },
       ];
       characters.forEach((character,i) => {
@@ -173,19 +190,29 @@ export default {
       return cell;
     },
     clickOnCell (cell) {
-      this.applyAction(this.currentActionStatus, cell)
+      this.applyAction(this.currentActionType, cell)
     },
     applyTurn() {
-      
+      this.$axios.post(`/games/${this.gameId}/turn`, {
+        actions: this.currentTurn.actions,
+        player: this.currentUser.id,
+        x: this.currentPlayer.x,
+        y: this.currentPlayer.y
+      }).then((response) => {
+        console.log(response)
+      }).catch((e) => {
+        console.log(e);
+      })
     },
     applyAction(type, cell) {
       if (this.currentTurn.nbActionsRestante === 0) {
         console.log("vous n'avez plus d'actions");
+        this.applyTurn();
         return;
       }
       if (this.currentPlayer.user.id === this.currentUser.id) {
         if (type === constantes.actionTypes.DEPLACEMENT && cell) {
-          if (this.currentPlayer.mode !== constantes.playerModes.DEPLACEMENT) {
+          if (this.currentActionType !== constantes.actionTypes.DEPLACEMENT) {
             console.log("Vous n'êtes pas en mode deplacement");
             return;
           }
@@ -212,10 +239,22 @@ export default {
           });
           this.moveView(selectedCellIndex);
         } else if (type === constantes.actionTypes.ATTAQUER) {
-          if (this.currentPlayer.mode !== constantes.playerModes.ATTAQUE) {
+          if (this.currentActionType !== constantes.actionTypes.ATTAQUER) {
             console.log("Vous n'êtes pas en mode attaque");
             return;
           } 
+          if (cell.status !== constantes.cellStatus.JOUEUR || cell.character.user.id === this.currentUser.id) {
+            console.log("vous ne pouvez pas attaquer sur cette case il n'y a pas d'autres joueur sur cette case.")
+            return;
+          }
+          this.currentTurn.actions.push({
+            type: constantes.actionTypes.ATTAQUER,
+            targetX: cell.x,
+            targetY: cell.y,
+            character: cell.character.id,
+            weapon: null
+          });
+          this.currentTurn.nbActionsRestante--;
         }
       }
     },
@@ -240,5 +279,25 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.patoune {
+  position: fixed;
+  right: 10%;
+  bottom: 5%;
+  width: 20vh;
+  height: 20vh;
+  padding: 5vh;
+  background-color: yellow;
+  background-size: cover;
+  border-radius: 50%;
+}
+
+.attaque {
+  background-image: url('/assets/img/object.png');
+}
+
+.deplacement {
+  background-image: url('/assets/img/bottes.png');
 }
 </style>
