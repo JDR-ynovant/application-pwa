@@ -6,13 +6,9 @@ export default {
     OBJET: "OBJET",
   },
   actionTypes: {
-    ATTAQUER: "ATTAQUER",
-    USAGE: "USAGE",
-    DEPLACEMENT: "DEPLACEMENT",
-    PASSE: "PASSE",
-  },
-  playerModes: {
-    ATTAQUE: "ATTAQUE",
-    DEPLACEMENT: "DEPLACEMENT",
+    ATTAQUER: "attack",
+    USAGE: "usage",
+    DEPLACEMENT: "move",
+    PASSE: "null",
   }
 };
