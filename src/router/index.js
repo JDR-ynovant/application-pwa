@@ -21,6 +21,12 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "create" */ "../views/Create.vue"),
   },
+  {
+    path: "/join",
+    name: "Join", 
+    component:() =>
+      import(/* webpackChunkName: "create" */ "../views/Join.vue"),
+  }
 ];
 
 const router = new VueRouter({
