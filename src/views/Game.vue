@@ -207,63 +207,66 @@ export default {
       //   console.log(e);
       // })
       this.currentTurn = this.hydrateTurn();
+      this.currentTurn.currentPlayer = this.informations.characters[++this.currentTurn.currentPlayerIndex];
     },
     applyAction(type, cell) {
       if (this.currentTurn.nbActionsRestante === 0) {
-        console.log("vous n'avez plus d'actions");
+        console.log("Vous n'avez plus d'actions.");
         this.applyTurn();
         return;
       }
-      if (this.currentTurn.currentPlayer.user.id === this.currentUser.id) {
-        if (type === constantes.actionTypes.DEPLACEMENT && cell) {
-          if (this.currentActionType !== constantes.actionTypes.DEPLACEMENT) {
-            console.log("Vous n'êtes pas en mode deplacement");
-            return;
-          }
-          if (cell.status === constantes.cellStatus.OBSTACLE || cell.status === constantes.cellStatus.JOUEUR) {
-            console.log("vous ne pouvez pas vous deplacer sur cette case il y a un obstacle ou un joueur")
-            return;
-          }
-          const oldCellIndex = this.getCellIndexAtCoordinate(this.currentTurn.currentPlayer.x, this.currentTurn.currentPlayer.y);
-          this.informations.grid.cells[oldCellIndex].character = null;
-          this.informations.grid.cells[oldCellIndex].status = constantes.cellStatus.VIDE;
-
-          const selectedCellIndex = this.informations.grid.cells.findIndex((c) => cell.id === c.id);
-          this.informations.grid.cells[selectedCellIndex].character = this.currentTurn.currentPlayer;
-          this.informations.grid.cells[selectedCellIndex].status = constantes.cellStatus.JOUEUR;
-
-          const indexCurrentPlayer = this.informations.characters.findIndex((character) => this.currentTurn.currentPlayer.user.id === character.user.id);
-          this.informations.characters[indexCurrentPlayer].x = cell.x;
-          this.informations.characters[indexCurrentPlayer].y = cell.y;
-          this.currentTurn.nbActionsRestante--;
-          this.currentTurn.actions.push({
-            type: constantes.actionTypes.DEPLACEMENT,
-            targetX: cell.x,
-            targetY: cell.y,
-          });
-          this.moveView(selectedCellIndex);
-        } else if (type === constantes.actionTypes.ATTAQUER) {
-          if (this.currentActionType !== constantes.actionTypes.ATTAQUER) {
-            console.log("Vous n'êtes pas en mode attaque");
-            return;
-          } 
-          if (cell.status !== constantes.cellStatus.JOUEUR || cell.character.user.id === this.currentUser.id) {
-            console.log("vous ne pouvez pas attaquer sur cette case il n'y a pas d'autres joueur sur cette case.")
-            return;
-          }
-
-          const selectedCellIndex = this.informations.grid.cells.findIndex((c) => cell.id === c.id);
-          this.informations.grid.cells[selectedCellIndex].character.bloodSugar++;
-
-          this.currentTurn.actions.push({
-            type: constantes.actionTypes.ATTAQUER,
-            targetX: cell.x,
-            targetY: cell.y,
-            character: cell.character.id,
-            weapon: null
-          });
-          this.currentTurn.nbActionsRestante--;
+      if (this.currentTurn.currentPlayer.user.id != this.currentUser.id) {
+        console.log("C'est au tour des autres joueurs !");
+        return;
+      }
+      if (type === constantes.actionTypes.DEPLACEMENT && cell) {
+        if (this.currentActionType !== constantes.actionTypes.DEPLACEMENT) {
+          console.log("Vous n'êtes pas en mode deplacement.");
+          return;
         }
+        if (cell.status === constantes.cellStatus.OBSTACLE || cell.status === constantes.cellStatus.JOUEUR) {
+          console.log("vous ne pouvez pas vous deplacer sur cette case il y a un obstacle ou un joueur")
+          return;
+        }
+        const oldCellIndex = this.getCellIndexAtCoordinate(this.currentTurn.currentPlayer.x, this.currentTurn.currentPlayer.y);
+        this.informations.grid.cells[oldCellIndex].character = null;
+        this.informations.grid.cells[oldCellIndex].status = constantes.cellStatus.VIDE;
+
+        const selectedCellIndex = this.informations.grid.cells.findIndex((c) => cell.id === c.id);
+        this.informations.grid.cells[selectedCellIndex].character = this.currentTurn.currentPlayer;
+        this.informations.grid.cells[selectedCellIndex].status = constantes.cellStatus.JOUEUR;
+
+        const indexCurrentPlayer = this.informations.characters.findIndex((character) => this.currentTurn.currentPlayer.user.id === character.user.id);
+        this.informations.characters[indexCurrentPlayer].x = cell.x;
+        this.informations.characters[indexCurrentPlayer].y = cell.y;
+        this.currentTurn.nbActionsRestante--;
+        this.currentTurn.actions.push({
+          type: constantes.actionTypes.DEPLACEMENT,
+          targetX: cell.x,
+          targetY: cell.y,
+        });
+        this.moveView(selectedCellIndex);
+      } else if (type === constantes.actionTypes.ATTAQUER) {
+        if (this.currentActionType !== constantes.actionTypes.ATTAQUER) {
+          console.log("Vous n'êtes pas en mode attaque");
+          return;
+        } 
+        if (cell.status !== constantes.cellStatus.JOUEUR || cell.character.user.id === this.currentUser.id) {
+          console.log("vous ne pouvez pas attaquer sur cette case il n'y a pas d'autres joueur sur cette case.")
+          return;
+        }
+
+        const selectedCellIndex = this.informations.grid.cells.findIndex((c) => cell.id === c.id);
+        this.informations.grid.cells[selectedCellIndex].character.bloodSugar++;
+
+        this.currentTurn.actions.push({
+          type: constantes.actionTypes.ATTAQUER,
+          targetX: cell.x,
+          targetY: cell.y,
+          character: cell.character.id,
+          weapon: null
+        });
+        this.currentTurn.nbActionsRestante--;
       }
     },
     getCellIndexAtCoordinate(x, y) {
