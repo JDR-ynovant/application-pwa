@@ -33,7 +33,7 @@ export default new Vuex.Store({
   actions: {
     async setCurrentUser({ commit }, userName) {
       try {
-        const response = await axios.post(
+        const response = await this._vm.axios.post(
           "https://candy-fight.marmog.cloud/api/users",
           { name: userName }
         );
@@ -47,7 +47,7 @@ export default new Vuex.Store({
     },
     async addGame({ commit }, gameParam) {
       try {
-        const response = await axios.post(
+        const response = await this._vm.axios.post(
           "https://candy-fight.marmog.cloud/api/games",
           {
             name: gameParam.gameName,
@@ -70,7 +70,7 @@ export default new Vuex.Store({
     },
     async setCurrentGame({ commit }, gameId) {
       try {
-        const response = await axios.get(
+        const response = await this._vm.axios.get(
           `https://candy-fight.marmog.cloud/api/games/${gameId}`,
           {
             headers: {
