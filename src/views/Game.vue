@@ -64,10 +64,13 @@ export default {
     currentUser() {
       return this.$store.state.currentUser;
     },
+    gameId () {
+      return this.$route.params.gameId
+    }
   },
   created() {
     // TODO: à supprimer en réfléchissant à une technique de mise à jour lorsque l'on arrive sur la games
-    this.$store.dispatch("setCurrentUser");
+    
   },
   mounted() {
     this.informations.characters = this.hydrateCharacters();
@@ -122,7 +125,7 @@ export default {
         this.informations.grid.cells[index].character = character;
         this.informations.grid.cells[index].status =
           constantes.cellStatus.JOUEUR;
-        if (this.currentTurn.currentPlayerIndex === i) {
+        if (this.currentTurn.currentPlayerIndex === i) {  
           this.moveView(index);
         }
       });
