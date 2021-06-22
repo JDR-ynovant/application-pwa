@@ -12,44 +12,47 @@
       </div>
       <p>
         <input
-            id="gameName"
-            v-model="gameName"
-            type="text"
-            name="gameName"
-            placeholder="Game Name"
+          id="gameName"
+          v-model="gameName"
+          type="text"
+          name="gameName"
+          placeholder="Game Name"
         />
       </p>
       <p>
-        <input v-if="!this.$store.state.currentUser"
-               id="name"
-               v-model="name"
-               type="text"
-               name="name"
-               placeholder="Your Name"
+        <input
+          v-if="!this.$store.state.currentUser"
+          id="name"
+          v-model="name"
+          type="text"
+          name="name"
+          placeholder="Your Name"
         />
       </p>
       <p>
         <label for="playerCount">Players max : </label>
         <input
-            id="playerCount"
-            v-model="playerCount"
-            type="number"
-            name="playerCount"
-            min="2"
-            max="5"
+          id="playerCount"
+          v-model="playerCount"
+          type="number"
+          name="playerCount"
+          min="2"
+          max="5"
         />
       </p>
       <p>
         <button class="button" @click="checkForm">Create the game</button>
       </p>
     </div>
-    <div v-if="this.$store.state.currentUser.games">
-      <p>share this link : </p>
-      <p>http://localhost:8080/join/{{ this.$store.state.currentUser.games[0].game.id }}</p>
+    <div v-if="this.$store.state.currentUser">
+      <p>share this link :</p>
+      <p>
+        http://localhost:8080/join/{{
+          this.$store.state.currentUser.games[0].game.id
+        }}
+      </p>
     </div>
   </div>
-
-
 </template>
 
 <script>
