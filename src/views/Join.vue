@@ -31,12 +31,11 @@
         />
       </p>
       <p>
-        <router-link to="/game"
-          ><button class="button" type="submit" value="Submit">
-            Join the game
-          </button></router-link
-        >
+        <router-link to="/game"><button class="button" type="submit" value="Submit">
+          Join the game
+        </button></router-link>
       </p>
+      
     </form>
   </div>
 </template>
@@ -49,5 +48,5 @@ export default {
       gameCode: null,
     };
   },
-};
+}
 </script>

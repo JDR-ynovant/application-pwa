@@ -1,55 +1,56 @@
 <template>
   <div class="center-content">
-    <img
-      src="../assets/img/licorne.png"
-      class="m-10"
-      @click="$router.push({ name: 'Home' })"
-    />
-
-    <div v-if="errors.length">
-      <b>Please correct the following error(s):</b>
-      <ul>
-        <li v-for="(error, index) in errors" :key="`error-${index}`">
-          {{ error }}
-        </li>
-      </ul>
+    <img src="../assets/img/licorne.png" class="m-10" />
+    <div v-if="!this.$store.state.currentUser">
+      <div v-if="errors.length">
+        <b>Please correct the following error(s):</b>
+        <ul>
+          <li v-for="(error, index) in errors" :key="`error-${index}`">
+            {{ error }}
+          </li>
+        </ul>
+      </div>
+      <p>
+        <input
+          id="gameName"
+          v-model="gameName"
+          type="text"
+          name="gameName"
+          placeholder="Game Name"
+        />
+      </p>
+      <p>
+        <input
+          v-if="!this.$store.state.currentUser"
+          id="name"
+          v-model="name"
+          type="text"
+          name="name"
+          placeholder="Your Name"
+        />
+      </p>
+      <p>
+        <label for="playerCount">Players max : </label>
+        <input
+          id="playerCount"
+          v-model="playerCount"
+          type="number"
+          name="playerCount"
+          min="2"
+          max="5"
+        />
+      </p>
+      <p>
+        <button class="button" @click="checkForm">Create the game</button>
+      </p>
     </div>
-    <p>
-      <input
-        id="gameName"
-        v-model="gameName"
-        type="text"
-        name="gameName"
-        placeholder="Game Name"
-      />
-    </p>
-    <p>
-      <input
-        v-if="!this.$store.state.currentUser"
-        id="name"
-        v-model="name"
-        type="text"
-        name="name"
-        placeholder="Your Name"
-      />
-    </p>
-    <p>
-      <label for="playerCount">Players max : </label>
-      <input
-        id="playerCount"
-        v-model="playerCount"
-        type="number"
-        name="playerCount"
-        min="2"
-        max="5"
-      />
-    </p>
-    <p>
-      <button class="button" @click="checkForm">Create the game</button>
-    </p>
-
-    <div>
+    <div v-if="this.$store.state.currentUser">
       <p>share this link :</p>
+      <p>
+        http://localhost:8080/join/{{
+          this.$store.state.currentUser.games[0].game.id
+        }}
+      </p>
     </div>
   </div>
 </template>

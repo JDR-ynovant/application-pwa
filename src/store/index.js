@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-//import VuexPersistence from "vuex-persist";
+import VuexPersistence from 'vuex-persist'
 
 Vue.use(Vuex);
 
@@ -31,6 +31,29 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    async addGame({ commit }, gameParam) {
+      try {
+        const response = await axios.post(
+          "https://candy-fight.marmog.cloud/api/games",
+          {
+            name: gameParam.gameName,
+            playerCount: parseInt(gameParam.playerCount),
+          },
+          {
+            headers: {
+              "X-User": this.state.currentUser.id,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          const game = response.data;
+          commit("ADD_GAME", { game });
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
     async setCurrentUser({ commit }, userName) {
       try {
         const response = await this._vm.axios.post(
@@ -88,5 +111,5 @@ export default new Vuex.Store({
     },
   },
   modules: {},
-  //plugins: [vuexPersist.plugin],
+  plugins: [new VuexPersistence().plugin]
 });
