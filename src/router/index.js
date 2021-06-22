@@ -23,10 +23,17 @@ const routes = [
   },
   {
     path: "/join",
-    name: "Join", 
-    component:() =>
+    name: "Join",
+    component: () =>
       import(/* webpackChunkName: "create" */ "../views/Join.vue"),
-  }
+  },
+  {
+    path: "/join/:id",
+    props: true,
+    name: "JoinGame",
+    component: () =>
+      import(/* webpackChunkName: "create" */ "../views/JoinGame.vue"),
+  },
 ];
 
 const router = new VueRouter({
