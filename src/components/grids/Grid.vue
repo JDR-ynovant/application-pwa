@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     handleClickOnCell(index) {
-      this.$emit('click-on-cell', this.informations.grid.cells[index]);
+      this.$emit("click-on-cell", this.informations.grid.cells[index]);
     },
   },
 };

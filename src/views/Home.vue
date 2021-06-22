@@ -1,10 +1,10 @@
 <template>
   <div id="page-home" class="pages-background">
-    <img 
+    <img
       v-if="currentUser"
-      src="/assets/img/playing-cards.png" 
+      src="/assets/img/playing-cards.png"
       class="m-10 game-list"
-      @click="$router.push({name: 'GameList'})"
+      @click="$router.push({ name: 'GameList' })"
     />
     <img src="/assets/img/licorne.png" class="m-10" />
     <t-button
@@ -13,10 +13,10 @@
       @click="$router.push({ path: 'create' })"
     />
     <span class="m-10">Or ...</span>
-    <t-button 
-      label="Join a game" 
-      class="m-10" 
-      @click="$router.push({ path: 'join' })" 
+    <t-button
+      label="Join a game"
+      class="m-10"
+      @click="$router.push({ path: 'join' })"
     />
     <img src="/assets/img/heart.png" class="m-10" />
   </div>
@@ -31,10 +31,10 @@ export default {
     TButton,
   },
   computed: {
-    currentUser () {
+    currentUser() {
       return this.$store.state.currentUser;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

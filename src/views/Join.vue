@@ -1,9 +1,9 @@
 <template>
   <div class="center-content">
-    <img 
-      src="../assets/img/licorne.png" 
-      class="m-10" 
-      @click="$router.push({name: 'Home'})"
+    <img
+      src="../assets/img/licorne.png"
+      class="m-10"
+      @click="$router.push({ name: 'Home' })"
     />
 
     <form id="app" @submit="checkForm">
@@ -31,11 +31,12 @@
         />
       </p>
       <p>
-        <router-link to="/game"><button class="button" type="submit" value="Submit">
-          Join the game
-        </button></router-link>
+        <router-link to="/game"
+          ><button class="button" type="submit" value="Submit">
+            Join the game
+          </button></router-link
+        >
       </p>
-      
     </form>
   </div>
 </template>
@@ -48,5 +49,5 @@ export default {
       gameCode: null,
     };
   },
-}
+};
 </script>

@@ -10,5 +10,5 @@ export default {
     USAGE: "usage",
     DEPLACEMENT: "move",
     PASSE: "null",
-  }
+  },
 };
