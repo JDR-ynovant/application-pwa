@@ -2,7 +2,7 @@ module.exports = {
   lintOnSave: false,
   pwa: {
     name: "CandiFight",
-    assetsVersion: "0.1",
+    assetsVersion: "0.2",
     themeColor: "#4DBA87",
     appleMobileWebAppCapable: "yes",
     manifestOptions: {

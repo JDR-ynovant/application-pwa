@@ -7,6 +7,7 @@
 <style>
 body {
   margin: 0;
+  overflow: hidden;
 }
 .pages-background {
   background-color: #ffb0b0;
