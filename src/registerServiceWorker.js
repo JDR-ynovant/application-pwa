@@ -9,6 +9,24 @@ if (process.env.NODE_ENV === "production") {
         "App is being served from cache by a service worker.\n" +
           "For more details, visit https://goo.gl/AFskqB"
       );
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("service-worker.js");
+        navigator.serviceWorker.ready
+          .then(function (registration) {
+            return registration.pushManager.getSubscription();
+          })
+          .then(function (subscription) {
+            if (!subscription) {
+              subscribe();
+            } else {
+              console.log(
+                JSON.stringify({
+                  subscription: subscription,
+                })
+              );
+            }
+          });
+      }
     },
     registered() {
       console.log("Service worker has been registered.");
