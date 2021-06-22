@@ -53,31 +53,42 @@ export default {
       errors: [],
       gameName: null,
       playerCount: null,
-      name: null,
+      name: null, //todo si dans le store y a un user sinon null
       newUser: null,
     };
   },
   methods: {
-    checkForm: function (e) {
+    async checkForm(e) {
       if (this.name && this.playerCount && this.gameName) {
         //todo route au store pour créer un game + user
 
-        // this.setUserAndCreateGame();
+        await this.$store.dispatch("setCurrentUser", this.name);
+        const gameParam = {
+          playerCount: this.playerCount,
+          gameName: this.gameName,
+        };
+        await this.$store.dispatch("addGame", gameParam);
 
-        const response = axios.post(
-            "https://candy-fight.marmog.cloud/api/users",
-            { name: this.name }
-        );
+        //
+        // if (response.status === 201) {
+        //   this.newUser = response.data;
+        //   console.log(this.newUser.id);
+        //
+        //
+        //   const game = axios.post("https://candy-fight.marmog.cloud/api/games", {
+        //     name: this.gameName,
+        //     playerCount: parseInt(this.playerCount),
+        //   }, {
+        //     headers: {
+        //       'X-User': this.newUser.id,
+        //     }
+        //   });
+        //
+        // } else {
+        //   console.log("meh");
+        // }
 
-        if (response.status === 200) {
-          this.newUser = response.data;
-          console.log(this.newUser);
-          //create new game
-        } else {
-          console.log("meh");
-        }
-
-        console.log(this.newUser);
+        //console.log(this.newUser);
         // let User = { name: this.name };
         // let Game = {
         //   name: this.gameName,
@@ -117,6 +128,7 @@ export default {
     } else {
       console.log("meh");
     }
+    return true;
   },
 };
 </script>
