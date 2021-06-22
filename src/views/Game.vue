@@ -11,8 +11,8 @@
     </section>
     <div class="grid-container">
       <grid
-        :nbRows="20"
-        :nbCols="20"
+        :nbRows="this.currentGrid.height"
+        :nbCols="this.currentGrid.width"
         :informations="informations"
         @click-on-cell="clickOnCell"
       />
@@ -20,7 +20,7 @@
     <div
       v-if="
         currentTurn.currentPlayer &&
-        currentTurn.currentPlayer.user.id === currentUser.id
+        currentTurn.currentPlayer.user === currentUser.id
       "
       :class="{
         patoune: true,
@@ -44,14 +44,12 @@ export default {
     TMenuItem,
   },
   data: function () {
-    const informations = {
-      grid: this.generateGrid(),
-      characters: [],
-      objects: [],
-    };
     return {
-      gameId: "<id de la game>",
-      informations,
+      informations: {
+        grid: [],
+        characters: [],
+        objects: [],
+      },
       currentTurn: this.hydrateTurn(),
       currentActionType: constantes.actionTypes.DEPLACEMENT,
       constantes: {
@@ -64,16 +62,23 @@ export default {
     currentUser() {
       return this.$store.state.currentUser;
     },
+    currentGame() {
+      return this.$store.state.currentGame;
+    },
+    currentGrid() {
+      return this.$store.state.currentGrid;
+    },
     gameId () {
       return this.$route.params.gameId
     }
   },
-  created() {
+  async mounted() {
     // TODO: à supprimer en réfléchissant à une technique de mise à jour lorsque l'on arrive sur la games
-    
-  },
-  mounted() {
-    this.informations.characters = this.hydrateCharacters();
+    await this.$store.dispatch('setCurrentGame', this.gameId)
+    await this.$store.dispatch('setCurrentGrid', this.currentGame.grid)
+    this.currentPlayerIndex = this.currentGame.players.findIndex((player) => player.id === this.currentGame.playing);
+    this.informations.grid = this.generateGrid();
+    this.informations.characters = this.hydrateCharacters(this.currentGame.players);
     this.informations.objects = this.generateObject();
   },
   methods: {
@@ -95,31 +100,7 @@ export default {
         currentPlayerIndex: 0,
       };
     },
-    hydrateCharacters() {
-      let characters = [
-        {
-          bloodSugar: 0,
-          inventory: [],
-          x: 1,
-          y: 3,
-          sprite: "/assets/img/character.png",
-          user: {
-            id: "<un super id>",
-            name: "kamhan",
-          },
-        },
-        {
-          bloodSugar: 0,
-          inventory: [],
-          x: 6,
-          y: 9,
-          sprite: "/assets/img/licorne.png",
-          user: {
-            id: "<un autre super id>",
-            name: "whisdom",
-          },
-        },
-      ];
+    hydrateCharacters(characters) {
       characters.forEach((character, i) => {
         const index = this.getCellIndexAtCoordinate(character.x, character.y);
         this.informations.grid.cells[index].character = character;
@@ -158,25 +139,20 @@ export default {
       }
       return objects;
     },
-    generateGrid() {
-      let cells = [];
-      for (let i = 0; i < 20; i++) {
-        for (let j = 0; j < 20; j++) {
-          if (i === 0 || j === 0 || i === 20 - 1 || j === 20 - 1) {
-            cells.push(
-              this.hydrateCell(i * 20 + j, constantes.cellStatus.OBSTACLE, {
-                x: i,
-                y: j,
-              })
-            );
-          } else {
-            cells.push(
-              this.hydrateCell(i * 20 + j, constantes.cellStatus.VIDE, {
-                x: i,
-                y: j,
-              })
-            );
-          }
+    generateGrid(grid) {
+      let cells = [], cell;
+      for (let i = 0; i < this.currentGrid.height; i++) {
+        for (let j = 0; j < this.currentGrid.width; j++) {
+          cell = this.currentGrid.cells[i*this.currentGrid.height + j];
+          cells.push({
+            id: i*this.currentGrid.height + j,
+            x: cell.x || 0,
+            y: cell.y || 0,
+            status: cell.type,
+            sprite: cell.sprite,
+            objet: null,
+            character: null,
+          });
         }
       }
       return { cells };
@@ -236,7 +212,7 @@ export default {
         });
         return;
       }
-      if (this.currentTurn.currentPlayer.user.id != this.currentUser.id) {
+      if (this.currentTurn.currentPlayer.user != this.currentUser.id) {
         this.$notify({
           group: "game-notification",
           text: "C'est au tour des autres joueurs !",
@@ -282,7 +258,7 @@ export default {
 
         const indexCurrentPlayer = this.informations.characters.findIndex(
           (character) =>
-            this.currentTurn.currentPlayer.user.id === character.user.id
+            this.currentTurn.currentPlayer.user.id === character.user
         );
         this.informations.characters[indexCurrentPlayer].x = cell.x;
         this.informations.characters[indexCurrentPlayer].y = cell.y;
@@ -304,7 +280,7 @@ export default {
         }
         if (
           cell.status !== constantes.cellStatus.JOUEUR ||
-          cell.character.user.id === this.currentUser.id
+          cell.character.user === this.currentUser.id
         ) {
           this.$notify({
             group: "game-notification",

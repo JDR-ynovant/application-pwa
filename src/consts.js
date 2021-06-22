@@ -1,7 +1,7 @@
 export default {
   cellStatus: {
-    VIDE: "VIDE",
-    OBSTACLE: "OBSTACLE",
+    VIDE: "walkable",
+    OBSTACLE: "obstacle",
     JOUEUR: "JOUEUR",
     OBJET: "OBJET",
   },

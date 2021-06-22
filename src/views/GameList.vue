@@ -6,7 +6,7 @@
       @click="$router.push({ name: 'Home' })"
     />
     <h2>Game list</h2>
-    <div v-for="game in gameList" :key="game" class="game-container-button">
+    <div v-for="game in gameList" :key="game.id" class="game-container-button">
       <label>{{ game.name }}</label>
       <div
         :class="{
@@ -17,6 +17,13 @@
         }"
       />
       <img
+        v-if="game.status === 'created'"
+        src="../assets/img/play-button.png"
+        class="arrow"
+        @click="startGame(game.id)"
+      />
+      <img
+        v-if="game.status === 'started'"
         src="../assets/img/right-arrow.png"
         class="arrow"
         @click="joinGame(game.id)"
@@ -49,8 +56,15 @@ export default {
   methods: {
     async joinGame(gameId) {
       await this.$store.dispatch("setCurrentGame", gameId);
-      this.$router.push({ name: "Game", params: { gameId: gameId } });
+      this.$router.push({ name: "Game", params: { gameId } });
     },
+    async startGame(gameId) {
+      await this.$store.dispatch("startGame", gameId);
+      this.$notify({
+        type: 'success',
+        text: 'La partie a bien démarré.'
+      });
+    }
   },
 };
 </script>
@@ -76,5 +90,6 @@ export default {
 .arrow {
   width: 15px;
   height: 15px;
+  cursor: pointer;
 }
 </style>
