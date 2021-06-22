@@ -11,8 +11,8 @@
     </section>
     <div class="grid-container">
       <grid
-        :nbRows="this.currentGrid.height"
-        :nbCols="this.currentGrid.width"
+        :nbRows="this.currentGrid ? this.currentGrid.height : 0"
+        :nbCols="this.currentGrid ? this.currentGrid.width : 0"
         :informations="informations"
         @click-on-cell="clickOnCell"
       />
@@ -79,7 +79,7 @@ export default {
     this.currentPlayerIndex = this.currentGame.players.findIndex((player) => player.id === this.currentGame.playing);
     this.informations.grid = this.generateGrid();
     this.informations.characters = this.hydrateCharacters(this.currentGame.players);
-    this.informations.objects = this.generateObject();
+    this.informations.objects = this.generateObject(this.currentGame.objects);
   },
   methods: {
     switchActionType() {
@@ -124,20 +124,16 @@ export default {
         inline: "center",
       });
     },
-    generateObject() {
-      let objects = [];
-      for (let i = 0; i < 10; i++) {
-        const x = Math.floor(Math.random() * 20);
-        const y = Math.floor(Math.random() * 20);
-        if (x === 0 || y === 0 || x === 20 - 1 || y === 20 - 1) break;
-        const sprite = "/assets/img/object.png";
-        objects.push({ x, y, sprite });
+    generateObject(objects) {
+      let objectsCopy = [];
+      const sprite = "/assets/img/object.png";
+      objects.forEach((object) => {
+        objectsCopy.push({ x: object.positionX, y: object.positionY, sprite, ...object });
         const index = this.getCellIndexAtCoordinate(x, y);
         this.informations.grid.cells[index].objet = { sprite: sprite };
-        this.informations.grid.cells[index].status =
-          constantes.cellStatus.OBJET;
-      }
-      return objects;
+        this.informations.grid.cells[index].status = constantes.cellStatus.OBJET;
+      })
+      return objectsCopy;
     },
     generateGrid(grid) {
       let cells = [], cell;

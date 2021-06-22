@@ -11,4 +11,8 @@ export default {
     DEPLACEMENT: "move",
     PASSE: "null",
   },
+  objectTypes: {
+    POTION: "potion",
+    WEAPON: "weapon",
+  }
 };
