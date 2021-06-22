@@ -2,51 +2,53 @@
   <div class="center-content">
     <img src="../assets/img/licorne.png" class="m-10" />
 
-    <form id="app" @submit="checkForm" action="#" method="post">
-      <div v-if="errors.length">
-        <b>Please correct the following error(s):</b>
-        <ul>
-          <li v-for="(error, index) in errors" :key="`error-${index}`">
-            {{ error }}
-          </li>
-        </ul>
-      </div>
-      <p>
-        <input
-          id="gameName"
-          v-model="gameName"
-          type="text"
-          name="gameName"
-          placeholder="Game Name"
-        />
-      </p>
-      <p>
-        <input
-          id="name"
-          v-model="name"
-          type="text"
-          name="name"
-          placeholder="Your Name"
-        />
-      </p>
-      <p>
-        <label for="nbPlayers">Players max : </label>
-        <input
-          id="nbPlayers"
-          v-model="nbPlayers"
-          type="number"
-          name="nbPlayers"
-          min="0"
-          max="5"
-        />
-      </p>
-      <p>
-        <button class="button" type="submit" value="Submit">
-          Create the game
-        </button>
-      </p>
-    </form>
+    <div v-if="errors.length">
+      <b>Please correct the following error(s):</b>
+      <ul>
+        <li v-for="(error, index) in errors" :key="`error-${index}`">
+          {{ error }}
+        </li>
+      </ul>
+    </div>
+    <p>
+      <input
+        id="gameName"
+        v-model="gameName"
+        type="text"
+        name="gameName"
+        placeholder="Game Name"
+      />
+    </p>
+    <p>
+      <input v-if="!this.$store.state.currentUser"
+        id="name"
+        v-model="name"
+        type="text"
+        name="name"
+        placeholder="Your Name"
+      />
+    </p>
+    <p>
+      <label for="playerCount">Players max : </label>
+      <input
+        id="playerCount"
+        v-model="playerCount"
+        type="number"
+        name="playerCount"
+        min="2"
+        max="5"
+      />
+    </p>
+    <p>
+      <button class="button" @click="checkForm">Create the game</button>
+    </p>
+
+    <div>
+      <p>share this link : </p>
+    </div>
   </div>
+
+
 </template>
 
 <script>
@@ -56,13 +58,20 @@ export default {
     return {
       errors: [],
       gameName: null,
-      nbPlayers: null,
+      playerCount: null,
       name: null,
+      newUser: null,
     };
   },
   methods: {
-    checkForm: function (e) {
-      if (this.name && this.age) {
+    async checkForm(e) {
+      if (this.name && this.playerCount && this.gameName) {
+        await this.$store.dispatch("setCurrentUser", this.name);
+        const gameParam = {
+          playerCount: this.playerCount,
+          gameName: this.gameName,
+        };
+        await this.$store.dispatch("addGame", gameParam);
         return true;
       }
       this.errors = [];
@@ -72,10 +81,10 @@ export default {
       if (!this.name) {
         this.errors.push("Your name is required");
       }
-      if (!this.nbPlayers) {
+      if (!this.playerCount) {
         this.errors.push("number players is required.");
       }
-      if (this.nbPlayers > 5 || this.nbPlayers < 0) {
+      if (this.playerCount > 5 || this.playerCount < 1) {
         this.errors.push("number players is not valid.");
       }
       e.preventDefault();
