@@ -6,9 +6,9 @@ export default {
     OBJET: "OBJET",
   },
   actionTypes: {
-    ATTAQUER: "ATTAQUER",
-    USAGE: "USAGE",
-    DEPLACEMENT: "DEPLACEMENT",
-    PASSE: "PASSE",
-  },
+    ATTAQUER: "attack",
+    USAGE: "usage",
+    DEPLACEMENT: "move",
+    PASSE: "null",
+  }
 };

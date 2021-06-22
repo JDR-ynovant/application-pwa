@@ -1,13 +1,21 @@
+
 <template>
-  <div :style="`background-image: url('${cellInfos.sprite}')`" class="cell">
+  <div :id="`cell-${cellInfos.id}`" :style="`background-image: url('${cellInfos.sprite}')`" class="cell" @click="$emit('click')">
     <div
       v-if="isCoveredByObject"
       :style="`background-image: url('${cellInfos.objet.sprite}')`"
       class="covered"
     />
     <div
-      v-if="isCoveredByJoueur"
+      v-else-if="isCoveredByJoueur"
       :style="`background-image: url('${cellInfos.character.sprite}')`"
+      class="covered"
+    >
+      <div class="lifebar-background"/>
+      <div class="lifebar" :style="`width: ${largeurLifebar}%`"/>
+    </div>
+    <div 
+      v-else
       class="covered"
     />
   </div>
@@ -38,6 +46,9 @@ export default {
     isCoveredByJoueur() {
       return this.cellInfos.status === this.cellStatus.JOUEUR;
     },
+    largeurLifebar () {
+      return this.cellInfos.character.bloodSugar * 10
+    }
   },
 };
 </script>
@@ -48,11 +59,10 @@ export default {
   width: 100%;
 }
 
-.cell:hover {
+.covered:hover {
   background-color: rgba(146, 161, 228, 0.5);
   background-image: none;
-  height: 98%;
-  width: 98%;
+  border: 2px solid rgb(46, 51, 73);
 }
 
 .covered {
@@ -61,5 +71,19 @@ export default {
   height: 50px;
   background-repeat: no-repeat;
   background-size: contain;
+}
+
+.lifebar-background {
+  position: absolute;
+  top: -15px;
+  width: 100%;
+  height: 10px;
+  background-color: green;
+}
+.lifebar {
+  position: absolute;
+  top: -15px;
+  height: 10px;
+  background-color: red;
 }
 </style>
