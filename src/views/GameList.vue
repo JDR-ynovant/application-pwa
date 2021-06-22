@@ -36,9 +36,9 @@ export default {
       return this.$store.state.currentUser.games;
     },
   },
-  mounted () {
+  mounted() {
     if (this.$store.state.currentUser === null) {
-      this.$router.push({name: 'Home'});
+      this.$router.push({ name: "Home" });
     }
   },
   data: () => {
