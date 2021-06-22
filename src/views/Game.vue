@@ -17,7 +17,9 @@
         @click-on-cell="clickOnCell"
       />
     </div>
-    <div :class="{
+    <div 
+      v-if="currentTurn.currentPlayer && currentTurn.currentPlayer.user.id === currentUser.id"
+      :class="{
         'patoune': true,
         'attaque': currentActionType === constantes.ATTAQUE,
         'deplacement': currentActionType === constantes.DEPLACEMENT
@@ -48,8 +50,6 @@ export default {
       gameId: '<id de la game>',
       informations,
       currentTurn: this.hydrateTurn(),
-      currentPlayer: null,
-      currentPlayerIndex: 0,
       currentActionType: constantes.actionTypes.DEPLACEMENT,
       constantes: {
         ATTAQUE: constantes.actionTypes.ATTAQUER,
@@ -84,7 +84,9 @@ export default {
     hydrateTurn () {
       return {
         nbActionsRestante: 4,
-        actions: []
+        actions: [],
+        currentPlayer: null,
+        currentPlayerIndex: 0
       }
     },
     hydrateCharacters() {
@@ -119,11 +121,11 @@ export default {
         );
         this.informations.grid.cells[index].character = character;
         this.informations.grid.cells[index].status = constantes.cellStatus.JOUEUR;
-        if (this.currentPlayerIndex === i) {
+        if (this.currentTurn.currentPlayerIndex === i) {
           this.moveView(index);
         }
       });
-      this.currentPlayer = characters[this.currentPlayerIndex];
+      this.currentTurn.currentPlayer = characters[this.currentTurn.currentPlayerIndex];
       return characters;
     },
     moveView (index) {
@@ -193,16 +195,18 @@ export default {
       this.applyAction(this.currentActionType, cell)
     },
     applyTurn() {
-      this.$axios.post(`/games/${this.gameId}/turn`, {
-        actions: this.currentTurn.actions,
-        player: this.currentUser.id,
-        x: this.currentPlayer.x,
-        y: this.currentPlayer.y
-      }).then((response) => {
-        console.log(response)
-      }).catch((e) => {
-        console.log(e);
-      })
+      // TODO: faire le lien entre l'api et le front 
+      // this.$axios.post(`/games/${this.gameId}/turn`, {
+      //   actions: this.currentTurn.actions,
+      //   player: this.currentUser.id,
+      //   x: this.currentTurn.currentPlayer.x,
+      //   y: this.currentTurn.currentPlayer.y
+      // }).then((response) => {
+      //   console.log(response)
+      // }).catch((e) => {
+      //   console.log(e);
+      // })
+      this.currentTurn = this.hydrateTurn();
     },
     applyAction(type, cell) {
       if (this.currentTurn.nbActionsRestante === 0) {
@@ -210,7 +214,7 @@ export default {
         this.applyTurn();
         return;
       }
-      if (this.currentPlayer.user.id === this.currentUser.id) {
+      if (this.currentTurn.currentPlayer.user.id === this.currentUser.id) {
         if (type === constantes.actionTypes.DEPLACEMENT && cell) {
           if (this.currentActionType !== constantes.actionTypes.DEPLACEMENT) {
             console.log("Vous n'êtes pas en mode deplacement");
@@ -220,15 +224,15 @@ export default {
             console.log("vous ne pouvez pas vous deplacer sur cette case il y a un obstacle ou un joueur")
             return;
           }
-          const oldCellIndex = this.getCellIndexAtCoordinate(this.currentPlayer.x, this.currentPlayer.y);
+          const oldCellIndex = this.getCellIndexAtCoordinate(this.currentTurn.currentPlayer.x, this.currentTurn.currentPlayer.y);
           this.informations.grid.cells[oldCellIndex].character = null;
           this.informations.grid.cells[oldCellIndex].status = constantes.cellStatus.VIDE;
 
           const selectedCellIndex = this.informations.grid.cells.findIndex((c) => cell.id === c.id);
-          this.informations.grid.cells[selectedCellIndex].character = this.currentPlayer;
+          this.informations.grid.cells[selectedCellIndex].character = this.currentTurn.currentPlayer;
           this.informations.grid.cells[selectedCellIndex].status = constantes.cellStatus.JOUEUR;
 
-          const indexCurrentPlayer = this.informations.characters.findIndex((character) => this.currentPlayer.user.id === character.user.id);
+          const indexCurrentPlayer = this.informations.characters.findIndex((character) => this.currentTurn.currentPlayer.user.id === character.user.id);
           this.informations.characters[indexCurrentPlayer].x = cell.x;
           this.informations.characters[indexCurrentPlayer].y = cell.y;
           this.currentTurn.nbActionsRestante--;
