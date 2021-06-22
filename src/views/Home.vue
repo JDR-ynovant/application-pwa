@@ -1,5 +1,11 @@
 <template>
   <div id="page-home" class="pages-background">
+    <img 
+      v-if="currentUser"
+      src="/assets/img/playing-cards.png" 
+      class="m-10 game-list"
+      @click="$router.push({name: 'GameList'})"
+    />
     <img src="/assets/img/licorne.png" class="m-10" />
     <t-button
       label="Create a game"
@@ -24,11 +30,11 @@ export default {
   components: {
     TButton,
   },
-  methods: {
-    joinGame() {
-      //this.$router.push({ name: "Game" });
-    },
-  },
+  computed: {
+    currentUser () {
+      return this.$store.state.currentUser;
+    }
+  }
 };
 </script>
 <style scoped>
@@ -38,5 +44,14 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.game-list {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
 }
 </style>
