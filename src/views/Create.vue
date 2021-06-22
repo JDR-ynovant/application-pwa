@@ -90,22 +90,6 @@ export default {
       e.preventDefault();
     },
   },
-
-  async setUserAndCreateGame() {
-    const response = await axios.post(
-      "https://candy-fight.marmog.cloud/api/users",
-      { name: this.name }
-    );
-
-    if (response.status === 200) {
-      this.newUser = response.data;
-      console.log(this.newUser);
-      //create new game
-    } else {
-      console.log("meh");
-    }
-    return true;
-  },
 };
 </script>
 
