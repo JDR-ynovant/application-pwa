@@ -1,6 +1,10 @@
 <template>
   <div class="center-content">
-    <img src="../assets/img/licorne.png" class="m-10" />
+    <img 
+      src="../assets/img/licorne.png" 
+      class="m-10" 
+      @click="$router.push({name: 'Home'})"
+    />
 
     <form id="app" @submit="checkForm">
       <p>

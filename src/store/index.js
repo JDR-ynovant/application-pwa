@@ -20,7 +20,7 @@ export default new Vuex.Store({
     ADD_GAME(state, payload) {
       //todo array push
       console.log(payload);
-      state.currentUser.game = payload;
+      state.currentUser.games.push(payload.game);
     },
   },
   actions: {

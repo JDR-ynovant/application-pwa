@@ -7,7 +7,11 @@
       @click="$router.push({ path: 'create' })"
     />
     <span class="m-10">Or ...</span>
-    <t-button label="Join a game" class="m-10" @click="joinGame" />
+    <t-button 
+      label="Join a game" 
+      class="m-10" 
+      @click="$router.push({ path: 'join' })" 
+    />
     <img src="/assets/img/heart.png" class="m-10" />
   </div>
 </template>
@@ -22,8 +26,7 @@ export default {
   },
   methods: {
     joinGame() {
-      this.$store.dispatch('setCurrentUser');
-      this.$router.push({ name: "Game" });
+      //this.$router.push({ name: "Game" });
     },
   },
 };
