@@ -20,7 +20,7 @@
       />
     </p>
     <p>
-      <input
+      <input v-if="!this.$store.state.currentUser"
         id="name"
         v-model="name"
         type="text"
@@ -42,7 +42,13 @@
     <p>
       <button class="button" @click="checkForm">Create the game</button>
     </p>
+
+    <div>
+      <p>share this link : </p>
+    </div>
   </div>
+
+
 </template>
 
 <script>
@@ -53,49 +59,19 @@ export default {
       errors: [],
       gameName: null,
       playerCount: null,
-      name: null, //todo si dans le store y a un user sinon null
+      name: null,
       newUser: null,
     };
   },
   methods: {
     async checkForm(e) {
       if (this.name && this.playerCount && this.gameName) {
-        //todo route au store pour créer un game + user
-
         await this.$store.dispatch("setCurrentUser", this.name);
         const gameParam = {
           playerCount: this.playerCount,
           gameName: this.gameName,
         };
         await this.$store.dispatch("addGame", gameParam);
-
-        //
-        // if (response.status === 201) {
-        //   this.newUser = response.data;
-        //   console.log(this.newUser.id);
-        //
-        //
-        //   const game = axios.post("https://candy-fight.marmog.cloud/api/games", {
-        //     name: this.gameName,
-        //     playerCount: parseInt(this.playerCount),
-        //   }, {
-        //     headers: {
-        //       'X-User': this.newUser.id,
-        //     }
-        //   });
-        //
-        // } else {
-        //   console.log("meh");
-        // }
-
-        //console.log(this.newUser);
-        // let User = { name: this.name };
-        // let Game = {
-        //   name: this.gameName,
-        //   user: this.name,
-        // };
-
-        // localStorage.setItem("User", User);
         return true;
       }
       this.errors = [];

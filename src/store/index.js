@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-// import VuexPersistence from "vuex-persist";
+//import VuexPersistence from "vuex-persist";
 
 Vue.use(Vuex);
 
@@ -18,7 +18,7 @@ export default new Vuex.Store({
       state.currentUser = payload.user;
     },
     ADD_GAME(state, payload) {
-      //todo make push this shit plz
+      //todo array push
       console.log(payload);
       state.currentUser.game = payload;
     },
@@ -63,5 +63,5 @@ export default new Vuex.Store({
     },
   },
   modules: {},
-  // plugins: [vuexPersist.plugin],
+  //plugins: [vuexPersist.plugin],
 });
