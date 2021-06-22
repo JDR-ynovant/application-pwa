@@ -13,7 +13,6 @@
 <script>
 import Cell from "./Cell";
 import GridMixins from "@/mixins/GridMixins";
-import constantes from "@/consts.js";
 
 export default {
   name: "Grid",
