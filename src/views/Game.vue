@@ -208,24 +208,44 @@ export default {
       // })
       this.currentTurn = this.hydrateTurn();
       this.currentTurn.currentPlayer = this.informations.characters[++this.currentTurn.currentPlayerIndex];
+      this.$notify({
+        group: 'game-notification',
+        text: "Vous avez bien fini votre tour.",
+        type: 'success'
+      });
     },
     applyAction(type, cell) {
       if (this.currentTurn.nbActionsRestante === 0) {
-        console.log("Vous n'avez plus d'actions.");
-        this.applyTurn();
+        this.$notify({
+          group: 'game-notification',
+          text: "Vous n'avez plus d'actions.",
+          type: 'error'
+        });
         return;
       }
       if (this.currentTurn.currentPlayer.user.id != this.currentUser.id) {
-        console.log("C'est au tour des autres joueurs !");
+        this.$notify({
+          group: 'game-notification',
+          text: "C'est au tour des autres joueurs !",
+          type: 'error'
+        });
         return;
       }
       if (type === constantes.actionTypes.DEPLACEMENT && cell) {
         if (this.currentActionType !== constantes.actionTypes.DEPLACEMENT) {
-          console.log("Vous n'êtes pas en mode deplacement.");
+          this.$notify({
+            group: 'game-notification',
+            text: "Vous n'êtes pas en mode deplacement.",
+            type: 'error'
+          });
           return;
         }
         if (cell.status === constantes.cellStatus.OBSTACLE || cell.status === constantes.cellStatus.JOUEUR) {
-          console.log("vous ne pouvez pas vous deplacer sur cette case il y a un obstacle ou un joueur")
+          this.$notify({
+            group: 'game-notification',
+            text: "Vous ne pouvez pas vous deplacer sur cette case il y a un obstacle ou un joueur.",
+            type: 'error'
+          });
           return;
         }
         const oldCellIndex = this.getCellIndexAtCoordinate(this.currentTurn.currentPlayer.x, this.currentTurn.currentPlayer.y);
@@ -248,11 +268,19 @@ export default {
         this.moveView(selectedCellIndex);
       } else if (type === constantes.actionTypes.ATTAQUER) {
         if (this.currentActionType !== constantes.actionTypes.ATTAQUER) {
-          console.log("Vous n'êtes pas en mode attaque");
+          this.$notify({
+            group: 'game-notification',
+            text: "Vous n'êtes pas en mode attaque.",
+            type: 'error'
+          });
           return;
         } 
         if (cell.status !== constantes.cellStatus.JOUEUR || cell.character.user.id === this.currentUser.id) {
-          console.log("vous ne pouvez pas attaquer sur cette case il n'y a pas d'autres joueur sur cette case.")
+          this.$notify({
+            group: 'game-notification',
+            text: "Vous ne pouvez pas attaquer sur cette case il n'y a pas d'autres joueur sur cette case.",
+            type: 'error'
+          });
           return;
         }
 
@@ -268,10 +296,14 @@ export default {
         });
         this.currentTurn.nbActionsRestante--;
       }
+      if (this.currentTurn.nbActionsRestante === 0) { 
+        this.applyTurn();
+      }
     },
     getCellIndexAtCoordinate(x, y) {
       return x * 20 + y;
     },
+
   },
 };
 </script>
@@ -286,18 +318,12 @@ export default {
   justify-content: space-evenly;
 }
 
-.grid-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .patoune {
   position: fixed;
-  right: 10%;
-  bottom: 5%;
-  width: 20vh;
-  height: 20vh;
+  right: 2vh;
+  bottom: 2vh;
+  width: 10vh;
+  height: 10vh;
   padding: 5vh;
   background-color: yellow;
   background-size: cover;
