@@ -7,7 +7,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     currentUser: null,
-    currentGame: null
+    currentGame: null,
   },
   getters: {
     getCurrentUser(state) {
@@ -15,7 +15,7 @@ export default new Vuex.Store({
     },
     getCurrentGame(state) {
       return state.currentGame;
-    }
+    },
   },
   mutations: {
     SET_CURRENT_USER(state, payload) {
@@ -28,14 +28,14 @@ export default new Vuex.Store({
     },
     SET_CURRENT_GAME(state, payload) {
       state.currentGame = payload.game;
-    }
+    },
   },
   actions: {
     async setCurrentUser({ commit }, userName) {
       try {
         const response = await axios.post(
           "https://candy-fight.marmog.cloud/api/users",
-          { name : userName }
+          { name: userName }
         );
         if (response.status === 201) {
           const user = response.data;
@@ -68,7 +68,7 @@ export default new Vuex.Store({
         console.log(e);
       }
     },
-    async setCurrentGame({commit}, gameId) {
+    async setCurrentGame({ commit }, gameId) {
       try {
         const response = await axios.get(
           `https://candy-fight.marmog.cloud/api/games/${gameId}`,
@@ -85,7 +85,7 @@ export default new Vuex.Store({
       } catch (e) {
         console.log(e);
       }
-    }
+    },
   },
   modules: {},
   //plugins: [vuexPersist.plugin],

@@ -23,16 +23,16 @@ const routes = [
   },
   {
     path: "/join",
-    name: "Join", 
-    component:() =>
+    name: "Join",
+    component: () =>
       import(/* webpackChunkName: "create" */ "../views/Join.vue"),
   },
   {
     path: "/game-list",
-    name: "GameList", 
-    component:() =>
+    name: "GameList",
+    component: () =>
       import(/* webpackChunkName: "create" */ "../views/GameList.vue"),
-  }
+  },
 ];
 
 const router = new VueRouter({

@@ -1,9 +1,9 @@
 <template>
   <div class="center-content">
-    <img 
-      src="../assets/img/licorne.png" 
-      class="m-10" 
-      @click="$router.push({name: 'Home'})"
+    <img
+      src="../assets/img/licorne.png"
+      class="m-10"
+      @click="$router.push({ name: 'Home' })"
     />
 
     <div v-if="errors.length">
@@ -24,7 +24,8 @@
       />
     </p>
     <p>
-      <input v-if="!this.$store.state.currentUser"
+      <input
+        v-if="!this.$store.state.currentUser"
         id="name"
         v-model="name"
         type="text"
@@ -48,11 +49,9 @@
     </p>
 
     <div>
-      <p>share this link : </p>
+      <p>share this link :</p>
     </div>
   </div>
-
-
 </template>
 
 <script>

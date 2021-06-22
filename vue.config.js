@@ -1,7 +1,6 @@
 module.exports = {
   lintOnSave: false,
   pwa: {
-
     name: "CandyFight",
     assetsVersion: "0.2",
     themeColor: "#4DBA87",
