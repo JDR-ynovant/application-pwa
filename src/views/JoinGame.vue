@@ -2,49 +2,45 @@
   <div class="center-content">
     <img src="../assets/img/licorne.png" class="m-10" />
 
-    <form id="app">
-      <p>nom de la partie : {{ this.game.name}}</p>
-      <p>code partie : {{ this.game.id}}</p>
-      <p>Joueurs</p>
-      <div v-for="player in this.game.players" :key="player">
-        <p> {{ player.id }} </p>
+    <div v-if="this.game">
+      <p>Game name : {{ this.game.name }}</p>
+      <p>Game code : {{ this.game.id }}</p>
+      <p>Your are : {{ this.$store.state.currentUser.id }}</p>
+      <p>Players list :</p>
+      <div v-for="player in this.game.players" :key="player.id">
+        <p>{{ player.id }}</p>
       </div>
 
-
-      <input v-if="!this.$store.state.currentUser"
+      <div>
+        <input
+          v-if="!this.$store.state.currentUser"
           id="userName"
-          v-model="userName"
+          v-model="newUserName"
           type="text"
           name="name"
           placeholder="Your Name"
-      />
-      <button class="button" >Create the game</button>
+        />
+      </div>
 
-<!--      <p>-->
-<!--        <input-->
-<!--          id="gameCode"-->
-<!--          v-model="gameCode"-->
-<!--          type="text"-->
-<!--          name="gameCode"-->
-<!--          placeholder="Game Code"-->
-<!--        />-->
-<!--      </p>-->
-<!--      <p>-->
-<!--        <button class="button" type="submit" value="Submit">-->
-<!--          Search the game-->
-<!--        </button>-->
-<!--      </p>-->
-<!--      <p>-->
-
-<!--      </p>-->
-<!--      <p>-->
-<!--        <router-link to="/game"-->
-<!--          ><button class="button" type="submit" value="Submit">-->
-<!--            Join the game-->
-<!--          </button></router-link-->
-<!--        >-->
-<!--      </p>-->
-    </form>
+      <button
+        class="button"
+        v-if="this.game.players.length == this.game.playerCount"
+        @click="startGame"
+      >
+        Start the game !
+      </button>
+      <!--      <button class="button" v-if="this.$store.state.currentUser == this.game.owner">Start the game !</button>-->
+      <button
+        class="button"
+        v-else-if="
+          !this.$store.state.currentUser ||
+          this.$store.state.currentUser != this.game.owner
+        "
+        v-on:click="createUser"
+      >
+        Join the game !
+      </button>
+    </div>
   </div>
 </template>
 
@@ -54,24 +50,49 @@ export default {
   data: () => {
     return {
       gameCode: null,
-      game : null,
-      userName : null,
+      game: null,
+      newUserName: null,
     };
   },
   methods: {
     async fetchGame() {
       try {
-        const url = this.$route.params.id
+        const url = this.$route.params.id;
         const response = await axios.get(
           "https://candy-fight.marmog.cloud/api/games/" + url
         );
         if (response.status === 200) {
-        this.game = response.data;
-        console.log(this.game);
+          this.game = response.data;
+          console.log(this.game);
         }
       } catch (e) {
         console.log(e);
       }
+    },
+    async createUser() {
+      if (this.newUserName) {
+        await this.$store.dispatch("setCurrentUser", this.newUserName);
+        this.game.players.push({ id: this.newUserName });
+      } else {
+        const response = await axios.post(
+          "https://candy-fight.marmog.cloud/api/games/" + this.game.id + "/join",
+          {},
+          {
+            headers: {
+              "X-User": this.$store.state.currentUser.id,
+            },
+          }
+        );
+        console.log(
+          "https://candy-fight.marmog.cloud/api/games/" + this.game.id + "/join"
+        );
+        if (response.status === 200) {
+          this.game.players.push({ id: this.$store.state.currentUser.id });
+        }
+      }
+    },
+    startGame() {
+      this.$router.push({ name: "Game" });
     },
   },
   created() {
