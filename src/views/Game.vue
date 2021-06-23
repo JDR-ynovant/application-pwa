@@ -20,6 +20,7 @@
     </div>
     <div
       v-if="
+        currentTurn && 
         currentTurn.currentPlayer &&
         currentTurn.currentPlayer.user === currentUser.id
       "
@@ -51,7 +52,7 @@ export default {
         characters: [],
         objects: [],
       },
-      currentTurn: this.hydrateTurn(),
+      currentTurn: null,
       currentActionType: constantes.actionTypes.DEPLACEMENT,
       constantes: {
         ATTAQUE: constantes.actionTypes.ATTAQUER,
@@ -74,19 +75,22 @@ export default {
     },
   },
   async mounted() {
-    // TODO: à supprimer en réfléchissant à une technique de mise à jour lorsque l'on arrive sur la games
-    await this.$store.dispatch("setCurrentGame", this.gameId);
-    await this.$store.dispatch("setCurrentGrid", this.currentGame.grid);
-    this.currentPlayerIndex = this.currentGame.players.findIndex(
-      (player) => player.id === this.currentGame.playing
-    );
-    this.informations.grid = this.generateGrid();
-    this.informations.characters = this.hydrateCharacters(
-      this.currentGame.players
-    );
-    this.informations.objects = this.generateObject(this.currentGame.objects);
+    this.initializeGame();
   },
   methods: {
+    async initializeGame () {
+      await this.$store.dispatch("setCurrentGame", this.gameId);
+      await this.$store.dispatch("setCurrentGrid", this.currentGame.grid);
+      this.currentTurn = this.hydrateTurn();
+      this.currentPlayerIndex = this.currentGame.players.findIndex(
+        (player) => player.id === this.currentGame.playing
+      );
+      this.informations.grid = this.generateGrid();
+      this.informations.characters = this.hydrateCharacters(
+        this.currentGame.players
+      );
+      this.informations.objects = this.generateObject(this.currentGame.objects);
+    },
     switchActionType() {
       if (this.currentActionType === constantes.actionTypes.ATTAQUER) {
         this.currentActionType = constantes.actionTypes.DEPLACEMENT;
@@ -231,12 +235,13 @@ export default {
           type: "success",
         });
         this.$router.push({ name: "Home" });
-      }).catch((e) => {
+      }).catch(async (e) => {
         this.$notify({
           group: "game-notification", 
           type: "error",
           text: e.response.data.message
-        })
+        });
+        await this.initializeGame();
       }) ;
     },
     applyAction(type, cell) {

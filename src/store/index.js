@@ -30,6 +30,10 @@ export default new Vuex.Store({
       state.currentUser.games.push(payload.game);
     },
     SET_CURRENT_GAME(state, payload) {
+      const index = state.currentUser.games.findIndex((game) => game.id === payload.game.id);
+      if (index >= 0) {
+        state.currentUser.games[index] = payload.game;
+      }
       state.currentGame = payload.game;
     },
     SET_CURRENT_grid(state, payload) {
