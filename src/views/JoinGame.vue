@@ -95,7 +95,8 @@ export default {
         console.log(this.$store.state.currentUser.id)
         if (response.status === 200) {
           this.game.players.push({ id: this.$store.state.currentUser.id });
-          this.$store.state.currentUser.games.push(this.game);
+          // this.$store.state.currentUser.games.push(this.game);
+          this.store.commit("ADD_GAME", this.game)
         }
       } else {
         const response = await this.$axios.post(
@@ -111,7 +112,8 @@ export default {
         );
         if (response.status === 200) {
           this.game.players.push({ id: this.$store.state.currentUser.id });
-          this.$store.state.currentUser.games.push(this.game);
+          this.store.commit("ADD_GAME", this.game);
+          // this.$store.state.currentUser.games.push(this.game);
         }
       }
     },
