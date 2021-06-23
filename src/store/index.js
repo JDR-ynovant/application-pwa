@@ -150,22 +150,7 @@ export default new Vuex.Store({
       }
     },
     async applyTurn({ commit }, { gameId, turn }) {
-      try {
-        const response = await this._vm.axios.post(
-          `https://candy-fight.marmog.cloud/api/games/${gameId}/turn`,
-          turn,
-          {
-            headers: {
-              "X-User": this.state.currentUser.id,
-            },
-          }
-        );
-        if (response.status === 200) {
-          commit("ADD_TURN", { gameId, turn });
-        }
-      } catch (e) {
-        console.log(e);
-      }
+      commit("ADD_TURN", { gameId, turn });
     },
   },
   modules: {},

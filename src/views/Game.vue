@@ -11,8 +11,9 @@
     </section>
     <div class="grid-container">
       <grid
-        :nbRows="this.currentGrid ? this.currentGrid.height : 0"
-        :nbCols="this.currentGrid ? this.currentGrid.width : 0"
+        v-if="this.currentGrid"
+        :nbRows="this.currentGrid.height"
+        :nbCols="this.currentGrid.width"
         :informations="informations"
         @click-on-cell="clickOnCell"
       />
@@ -199,27 +200,44 @@ export default {
       this.applyAction(this.currentActionType, cell);
     },
     applyTurn() {
-      this.$store.dispatch("applyTurn", {
-        gameId: this.gameId,
-        turn: {
-          actions: this.currentTurn.actions,
-          player: this.currentUser.id,
-          x: this.currentTurn.currentPlayer.positionX,
-          y: this.currentTurn.currentPlayer.positionY,
-        },
-      });
-      this.currentTurn = this.hydrateTurn();
-      this.currentTurn.currentPlayer =
-        this.informations.characters[
-          ++this.currentTurn.currentPlayerIndex %
-            this.currentGame.players.length
-        ];
-      this.$notify({
-        group: "game-notification",
-        text: "Vous avez bien fini votre tour.",
-        type: "success",
-      });
-      this.$router.push({ name: "Home" });
+      const turn = {
+        actions: this.currentTurn.actions,
+        player: this.currentUser.id,
+        x: this.currentTurn.currentPlayer.positionX,
+        y: this.currentTurn.currentPlayer.positionY,
+      };
+      this.$axios.post(
+        `https://candy-fight.marmog.cloud/api/games/${this.gameId}/turn`,
+        turn,
+        {
+          headers: {
+            "X-User": this.currentUser.id,
+          },
+        }
+      ).then((response) => {
+        this.$store.dispatch("applyTurn", {
+          gameId: this.gameId,
+          turn
+        });
+        this.currentTurn = this.hydrateTurn();
+        this.currentTurn.currentPlayer =
+          this.informations.characters[
+            ++this.currentTurn.currentPlayerIndex %
+              this.currentGame.players.length
+          ];
+        this.$notify({
+          group: "game-notification",
+          text: "Vous avez bien fini votre tour.",
+          type: "success",
+        });
+        this.$router.push({ name: "Home" });
+      }).catch((e) => {
+        this.$notify({
+          group: "game-notification", 
+          type: "error",
+          text: e.response.data.message
+        })
+      }) ;
     },
     applyAction(type, cell) {
       if (this.currentTurn.nbActionsRestante === 0) {
@@ -230,7 +248,7 @@ export default {
         });
         return;
       }
-      if (this.currentTurn.currentPlayer.user != this.currentUser.id) {
+      if (this.currentTurn.currentPlayer.id != this.currentUser.id) {
         this.$notify({
           group: "game-notification",
           text: "C'est au tour des autres joueurs !",
@@ -340,8 +358,12 @@ export default {
   float: left;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 80vh;
   justify-content: space-evenly;
+}
+
+.grid-container {
+  margin: 20vh 20vw
 }
 
 .patoune {

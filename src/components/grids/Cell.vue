@@ -40,7 +40,7 @@ export default {
   },
   computed: {
     isCoveredByObject() {
-      return [this.cellStatus.OBSTACLE, this.cellStatus.OBJET].includes(
+      return [this.cellStatus.OBJET].includes(
         this.cellInfos.status
       );
     },
@@ -58,6 +58,7 @@ export default {
 .cell {
   height: 100%;
   width: 100%;
+  background-size: cover;
 }
 
 .covered:hover {
