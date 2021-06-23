@@ -11,9 +11,9 @@
     </section>
     <div class="grid-container">
       <grid
-        v-if="this.currentGrid"
-        :nbRows="this.currentGrid.height"
-        :nbCols="this.currentGrid.width"
+        v-if="currentGrid"
+        :nbRows="currentGrid.height"
+        :nbCols="currentGrid.width"
         :informations="informations"
         @click-on-cell="clickOnCell"
       />

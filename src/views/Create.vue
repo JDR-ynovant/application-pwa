@@ -5,7 +5,7 @@
       class="m-10"
       @click="$router.push({ name: 'Home' })"
     />
-    <div v-if="!$store.state.currentUser">
+    <div>
       <div v-if="errors.length">
         <b>Please correct the following error(s):</b>
         <ul>
@@ -25,7 +25,6 @@
       </p>
       <p>
         <input
-          v-if="!$store.state.currentUser"
           id="name"
           v-model="name"
           type="text"
@@ -48,25 +47,17 @@
         <button class="button" @click="checkForm">Create the game</button>
       </p>
     </div>
-    <div v-if="this.$store.state.currentUser">
-      <p>share this code :</p>
-      <p>
-        {{ this.$store.state.currentUser.games[0].id }}
-      </p>
-
-      <button
-        class="button"
-        @click="joinGame(this.$store.state.currentUser.games[0].id)"
-      >
-        Go to the game
-      </button>
-    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: "Create",
+  computed: {
+    currentUser () {
+      return this.$store.state.currentUser
+    }
+  },
   data: () => {
     return {
       errors: [],
@@ -75,6 +66,11 @@ export default {
       name: null,
       newUser: null,
     };
+  },
+  mounted () {
+    if (this.currentUser) {
+      this.name = this.currentUser.name;
+    }
   },
   methods: {
     async checkForm(e) {
@@ -85,6 +81,7 @@ export default {
           gameName: this.gameName,
         };
         await this.$store.dispatch("addGame", gameParam);
+        this.$router.push({name: "Home"})
         return true;
       }
       this.errors = [];
@@ -103,7 +100,6 @@ export default {
       e.preventDefault();
     },
     joinGame(gameId) {
-      console.log(gameId);
       this.$router.push({ name: "JoinGame", params: { gameId } });
     },
   },

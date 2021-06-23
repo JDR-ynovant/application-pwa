@@ -7,24 +7,23 @@
     />
 
     <div v-if="this.game">
-      <p>Game name : {{ this.game.name }}</p>
-      <p>Game code : {{ this.game.id }}</p>
+      <p>Game name : {{ game.name }}</p>
+      <p>Game code : {{ game.id }}</p>
       <p>
         Your are :
         {{
-          this.$store.state.currentUser
-            ? this.$store.state.currentUser.id
+          currentUser
+            ? currentUser.id
             : "unkonwed"
         }}
       </p>
       <p>Players list :</p>
-      <div v-for="player in this.game.players" :key="player.id">
+      <div v-for="player in game.players" :key="player.id">
         <p>{{ player.name }}</p>
       </div>
 
       <div>
         <input
-          v-if="!this.$store.state.currentUser"
           id="userName"
           v-model="newUserName"
           type="text"
@@ -35,18 +34,17 @@
 
       <button
         class="button"
-        v-if="this.game.players.length == this.game.playerCount"
+        v-if="game.players.length == game.playerCount"
         @click="showGameList"
       >
         Show game list !
       </button>
-      <!--      <button class="button" v-if="this.$store.state.currentUser == this.game.owner">Start the game !</button>-->
       <button
         class="button"
         v-else-if="
           !clickJoin &&
-          (!this.$store.state.currentUser ||
-            this.$store.state.currentUser.id !== this.game.owner)
+          (!currentUser ||
+            currentUser.id !== game.owner)
         "
         v-on:click="createUser"
       >
@@ -59,6 +57,11 @@
 <script>
 export default {
   name: "JoinGame",
+  computed: {
+    currentUser () {
+      return this.$store.state.currentUser;
+    }
+  },
   data: () => {
     return {
       clickJoin: false,
@@ -117,7 +120,7 @@ export default {
           }
         );
         if (response.status === 200) {
-          this.game.players.push({ id: this.$store.state.currentUser.id });
+          this.game.players.push({ id: this.currentUser.id });
           this.$store.commit("ADD_GAME", { game: this.game });
         }
       }

@@ -28,6 +28,7 @@
         class="arrow"
         @click="joinGame(game.id)"
       />
+      <label>share this code : {{ baseUrl(game.id) }}</label>
     </div>
   </div>
 </template>
@@ -42,9 +43,14 @@ export default {
       }
       return this.$store.state.currentUser.games;
     },
+    currentUser () {
+       return this.$store.state.currentUser;
+    },
+
   },
-  mounted() {
-    if (this.$store.state.currentUser === null) {
+  async mounted() {
+    // await this.$store.dispatch("refreshCurrentUser");
+    if (this.currentUser === null) {
       this.$router.push({ name: "Home" });
     }
   },
@@ -65,6 +71,9 @@ export default {
         text: "La partie a bien démarré.",
       });
     },
+    baseUrl (gameId) {
+      return `${process.env.VUE_APP_URL}/join/${gameId}`;
+    }
   },
 };
 </script>

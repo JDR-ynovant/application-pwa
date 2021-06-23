@@ -77,6 +77,21 @@ export default new Vuex.Store({
         console.log(e);
       }
     },
+    async refreshCurrentUser({ commit, state }) {
+      try {
+        if (state.currentUser) {
+          const response = await this._vm.axios.get(
+            `https://candy-fight.marmog.cloud/api/users/${state.currentUser.id}`
+          );
+          if (response.status === 200) {
+            const user = response.data;
+            commit("SET_CURRENT_USER", { user });
+          }
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
     async addGame({ commit }, gameParam) {
       try {
         const response = await this._vm.axios.post(
