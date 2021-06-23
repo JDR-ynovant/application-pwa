@@ -30,6 +30,10 @@ export default new Vuex.Store({
       state.currentUser.games.push(payload.game);
     },
     SET_CURRENT_GAME(state, payload) {
+      const index = state.currentUser.games.findIndex((game) => game.id === payload.game.id);
+      if (index >= 0) {
+        state.currentUser.games[index] = payload.game;
+      }
       state.currentGame = payload.game;
     },
     SET_CURRENT_grid(state, payload) {
@@ -150,22 +154,7 @@ export default new Vuex.Store({
       }
     },
     async applyTurn({ commit }, { gameId, turn }) {
-      try {
-        const response = await this._vm.axios.post(
-          `https://candy-fight.marmog.cloud/api/games/${gameId}/turn`,
-          turn,
-          {
-            headers: {
-              "X-User": this.state.currentUser.id,
-            },
-          }
-        );
-        if (response.status === 200) {
-          commit("ADD_TURN", { gameId, turn });
-        }
-      } catch (e) {
-        console.log(e);
-      }
+      commit("ADD_TURN", { gameId, turn });
     },
   },
   modules: {},
