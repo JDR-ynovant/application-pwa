@@ -78,7 +78,10 @@ export default {
     await this.initializeGame();
 
     if (this.currentTurn.currentPlayer) {
-      const index = this.getCellIndexAtCoordinate(this.currentTurn.currentPlayer.positionX, this.currentTurn.currentPlayer.positionY);
+      const index = this.getCellIndexAtCoordinate(
+        this.currentTurn.currentPlayer.positionX,
+        this.currentTurn.currentPlayer.positionY
+      );
       this.moveView(index);
     }
   },
@@ -135,7 +138,7 @@ export default {
       return characters;
     },
     moveView(index) {
-        const cell = document.getElementById(
+      const cell = document.getElementById(
         `cell-${this.informations.grid.cells[index].id}`
       );
       cell.scrollIntoView({
@@ -230,7 +233,7 @@ export default {
             gameId: this.gameId,
             turn,
           });
-          console.log(response)
+          console.log(response);
           const game = response.data;
           this.$store.commit("SET_CURRENT_GAME", { game });
           this.$notify({

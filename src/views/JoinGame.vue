@@ -1,8 +1,8 @@
 <template>
   <div class="center-content">
-    <img 
-      src="../assets/img/licorne.png" 
-      class="m-10" 
+    <img
+      src="../assets/img/licorne.png"
+      class="m-10"
       @click="$router.push({ name: 'Home' })"
     />
 
@@ -46,7 +46,7 @@
         v-else-if="
           !clickJoin &&
           (!this.$store.state.currentUser ||
-          this.$store.state.currentUser.id !== this.game.owner)
+            this.$store.state.currentUser.id !== this.game.owner)
         "
         v-on:click="createUser"
       >
@@ -98,11 +98,11 @@ export default {
             },
           }
         );
-        console.log(this.$store.state.currentUser.id)
+        console.log(this.$store.state.currentUser.id);
         if (response.status === 200) {
           this.game.players.push({ id: this.$store.state.currentUser.id });
 
-          this.$store.commit("ADD_GAME", {game : this.game});
+          this.$store.commit("ADD_GAME", { game: this.game });
         }
       } else {
         const response = await this.$axios.post(
@@ -118,13 +118,12 @@ export default {
         );
         if (response.status === 200) {
           this.game.players.push({ id: this.$store.state.currentUser.id });
-          this.$store.commit("ADD_GAME", {game : this.game});
+          this.$store.commit("ADD_GAME", { game: this.game });
         }
       }
       this.clickJoin = true;
     },
     showGameList() {
-      const gameId = this.game.id;
       this.$router.push({ name: "GameList" });
     },
   },
