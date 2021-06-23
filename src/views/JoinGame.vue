@@ -58,7 +58,7 @@ export default {
     async fetchGame() {
       try {
         const url = this.$route.params.id;
-        const response = await axios.get(
+        const response = await this.$axios.get(
           "https://candy-fight.marmog.cloud/api/games/" + url
         );
         if (response.status === 200) {
@@ -74,8 +74,10 @@ export default {
         await this.$store.dispatch("setCurrentUser", this.newUserName);
         this.game.players.push({ id: this.newUserName });
       } else {
-        const response = await axios.post(
-          "https://candy-fight.marmog.cloud/api/games/" + this.game.id + "/join",
+        const response = await this.$axios.post(
+          "https://candy-fight.marmog.cloud/api/games/" +
+            this.game.id +
+            "/join",
           {},
           {
             headers: {
