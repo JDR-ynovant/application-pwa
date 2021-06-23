@@ -22,7 +22,7 @@
       v-if="
         currentTurn &&
         currentTurn.currentPlayer &&
-        currentTurn.currentPlayer.user === currentUser.id
+        currentTurn.currentPlayer.id === currentUser.id
       "
       :class="{
         patoune: true,
@@ -87,7 +87,7 @@ export default {
       await this.$store.dispatch("setCurrentGame", this.gameId);
       await this.$store.dispatch("setCurrentGrid", this.currentGame.grid);
       this.currentTurn = this.hydrateTurn();
-      this.currentPlayerIndex = this.currentGame.players.findIndex(
+      this.currentTurn.currentPlayerIndex = this.currentGame.players.findIndex(
         (player) => player.id === this.currentGame.playing
       );
       this.informations.grid = this.generateGrid();
@@ -231,7 +231,7 @@ export default {
             turn,
           });
           console.log(response)
-          const game = response.data.game;
+          const game = response.data;
           this.$store.commit("SET_CURRENT_GAME", { game });
           this.$notify({
             group: "game-notification",
