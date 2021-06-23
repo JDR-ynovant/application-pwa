@@ -20,7 +20,7 @@
     </div>
     <div
       v-if="
-        currentTurn && 
+        currentTurn &&
         currentTurn.currentPlayer &&
         currentTurn.currentPlayer.user === currentUser.id
       "
@@ -78,7 +78,7 @@ export default {
     this.initializeGame();
   },
   methods: {
-    async initializeGame () {
+    async initializeGame() {
       await this.$store.dispatch("setCurrentGame", this.gameId);
       await this.$store.dispatch("setCurrentGrid", this.currentGame.grid);
       this.currentTurn = this.hydrateTurn();
@@ -210,39 +210,42 @@ export default {
         x: this.currentTurn.currentPlayer.positionX,
         y: this.currentTurn.currentPlayer.positionY,
       };
-      this.$axios.post(
-        `https://candy-fight.marmog.cloud/api/games/${this.gameId}/turn`,
-        turn,
-        {
-          headers: {
-            "X-User": this.currentUser.id,
-          },
-        }
-      ).then((response) => {
-        this.$store.dispatch("applyTurn", {
-          gameId: this.gameId,
-          turn
+      this.$axios
+        .post(
+          `https://candy-fight.marmog.cloud/api/games/${this.gameId}/turn`,
+          turn,
+          {
+            headers: {
+              "X-User": this.currentUser.id,
+            },
+          }
+        )
+        .then(() => {
+          this.$store.dispatch("applyTurn", {
+            gameId: this.gameId,
+            turn,
+          });
+          this.currentTurn = this.hydrateTurn();
+          this.currentTurn.currentPlayer =
+            this.informations.characters[
+              ++this.currentTurn.currentPlayerIndex %
+                this.currentGame.players.length
+            ];
+          this.$notify({
+            group: "game-notification",
+            text: "Vous avez bien fini votre tour.",
+            type: "success",
+          });
+          this.$router.push({ name: "Home" });
+        })
+        .catch(async (e) => {
+          this.$notify({
+            group: "game-notification",
+            type: "error",
+            text: e.response.data.message,
+          });
+          await this.initializeGame();
         });
-        this.currentTurn = this.hydrateTurn();
-        this.currentTurn.currentPlayer =
-          this.informations.characters[
-            ++this.currentTurn.currentPlayerIndex %
-              this.currentGame.players.length
-          ];
-        this.$notify({
-          group: "game-notification",
-          text: "Vous avez bien fini votre tour.",
-          type: "success",
-        });
-        this.$router.push({ name: "Home" });
-      }).catch(async (e) => {
-        this.$notify({
-          group: "game-notification", 
-          type: "error",
-          text: e.response.data.message
-        });
-        await this.initializeGame();
-      }) ;
     },
     applyAction(type, cell) {
       if (this.currentTurn.nbActionsRestante === 0) {
@@ -368,7 +371,7 @@ export default {
 }
 
 .grid-container {
-  margin: 20vh 20vw
+  margin: 20vh 20vw;
 }
 
 .patoune {

@@ -42,7 +42,6 @@
         v-else-if="
           !this.$store.state.currentUser ||
           this.$store.state.currentUser.id !== this.game.owner
-
         "
         v-on:click="createUser"
       >

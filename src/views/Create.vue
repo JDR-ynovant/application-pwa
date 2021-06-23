@@ -60,7 +60,6 @@
       >
         Go to the game
       </button>
-
     </div>
   </div>
 </template>
