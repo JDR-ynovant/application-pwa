@@ -15,7 +15,7 @@
       </p>
       <p>Players list :</p>
       <div v-for="player in this.game.players" :key="player.id">
-        <p>{{ player ? player.id : player.name }}</p>
+        <p>{{ player.name }}</p>
       </div>
 
       <div>
@@ -95,8 +95,8 @@ export default {
         console.log(this.$store.state.currentUser.id)
         if (response.status === 200) {
           this.game.players.push({ id: this.$store.state.currentUser.id });
-          // this.$store.state.currentUser.games.push(this.game);
-          this.store.commit("ADD_GAME", this.game)
+
+          this.$store.commit("ADD_GAME", {game : this.game});
         }
       } else {
         const response = await this.$axios.post(
@@ -112,8 +112,7 @@ export default {
         );
         if (response.status === 200) {
           this.game.players.push({ id: this.$store.state.currentUser.id });
-          this.store.commit("ADD_GAME", this.game);
-          // this.$store.state.currentUser.games.push(this.game);
+          this.$store.commit("ADD_GAME", {game : this.game});
         }
       }
     },
