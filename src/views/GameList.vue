@@ -61,10 +61,10 @@ export default {
     async startGame(gameId) {
       await this.$store.dispatch("startGame", gameId);
       this.$notify({
-        type: 'success',
-        text: 'La partie a bien démarré.'
+        type: "success",
+        text: "La partie a bien démarré.",
       });
-    }
+    },
   },
 };
 </script>

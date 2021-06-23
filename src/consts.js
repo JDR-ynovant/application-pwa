@@ -14,5 +14,6 @@ export default {
   objectTypes: {
     POTION: "potion",
     WEAPON: "weapon",
-  }
+  },
+  charactersSprite: ["/assets/img/character.png", "/assets/img/licorne.png"],
 };

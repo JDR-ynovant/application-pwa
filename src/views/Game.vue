@@ -68,17 +68,21 @@ export default {
     currentGrid() {
       return this.$store.state.currentGrid;
     },
-    gameId () {
-      return this.$route.params.gameId
-    }
+    gameId() {
+      return this.$route.params.gameId;
+    },
   },
   async mounted() {
     // TODO: à supprimer en réfléchissant à une technique de mise à jour lorsque l'on arrive sur la games
-    await this.$store.dispatch('setCurrentGame', this.gameId)
-    await this.$store.dispatch('setCurrentGrid', this.currentGame.grid)
-    this.currentPlayerIndex = this.currentGame.players.findIndex((player) => player.id === this.currentGame.playing);
+    await this.$store.dispatch("setCurrentGame", this.gameId);
+    await this.$store.dispatch("setCurrentGrid", this.currentGame.grid);
+    this.currentPlayerIndex = this.currentGame.players.findIndex(
+      (player) => player.id === this.currentGame.playing
+    );
     this.informations.grid = this.generateGrid();
-    this.informations.characters = this.hydrateCharacters(this.currentGame.players);
+    this.informations.characters = this.hydrateCharacters(
+      this.currentGame.players
+    );
     this.informations.objects = this.generateObject(this.currentGame.objects);
   },
   methods: {
@@ -102,16 +106,22 @@ export default {
     },
     hydrateCharacters(characters) {
       characters.forEach((character, i) => {
-        const index = this.getCellIndexAtCoordinate(character.x, character.y);
-        this.informations.grid.cells[index].character = character;
+        const index = this.getCellIndexAtCoordinate(
+          character.positionX,
+          character.positionY
+        );
+        const characterWithSprite = {
+          ...character,
+          sprite:
+            constantes.charactersSprite[i % constantes.charactersSprite.length],
+        };
+        this.informations.grid.cells[index].character = characterWithSprite;
         this.informations.grid.cells[index].status =
           constantes.cellStatus.JOUEUR;
-        if (this.currentTurn.currentPlayerIndex === i) {  
-          this.moveView(index);
+        if (i === this.currentTurn.currentPlayerIndex) {
+          this.currentTurn.currentPlayer = characterWithSprite;
         }
       });
-      this.currentTurn.currentPlayer =
-        characters[this.currentTurn.currentPlayerIndex];
       return characters;
     },
     moveView(index) {
@@ -128,20 +138,30 @@ export default {
       let objectsCopy = [];
       const sprite = "/assets/img/object.png";
       objects.forEach((object) => {
-        objectsCopy.push({ x: object.positionX, y: object.positionY, sprite, ...object });
-        const index = this.getCellIndexAtCoordinate(x, y);
+        objectsCopy.push({
+          x: object.positionX,
+          y: object.positionY,
+          sprite,
+          ...object,
+        });
+        const index = this.getCellIndexAtCoordinate(
+          object.positionX,
+          object.positionY
+        );
         this.informations.grid.cells[index].objet = { sprite: sprite };
-        this.informations.grid.cells[index].status = constantes.cellStatus.OBJET;
-      })
+        this.informations.grid.cells[index].status =
+          constantes.cellStatus.OBJET;
+      });
       return objectsCopy;
     },
-    generateGrid(grid) {
-      let cells = [], cell;
+    generateGrid() {
+      let cells = [],
+        cell;
       for (let i = 0; i < this.currentGrid.height; i++) {
         for (let j = 0; j < this.currentGrid.width; j++) {
-          cell = this.currentGrid.cells[i*this.currentGrid.height + j];
+          cell = this.currentGrid.cells[i * this.currentGrid.height + j];
           cells.push({
-            id: i*this.currentGrid.height + j,
+            id: i * this.currentGrid.height + j,
             x: cell.x || 0,
             y: cell.y || 0,
             status: cell.type,
@@ -179,25 +199,27 @@ export default {
       this.applyAction(this.currentActionType, cell);
     },
     applyTurn() {
-      // TODO: faire le lien entre l'api et le front
-      // this.$axios.post(`/games/${this.gameId}/turn`, {
-      //   actions: this.currentTurn.actions,
-      //   player: this.currentUser.id,
-      //   x: this.currentTurn.currentPlayer.x,
-      //   y: this.currentTurn.currentPlayer.y
-      // }).then((response) => {
-      //   console.log(response)
-      // }).catch((e) => {
-      //   console.log(e);
-      // })
+      this.$store.dispatch("applyTurn", {
+        gameId: this.gameId,
+        turn: {
+          actions: this.currentTurn.actions,
+          player: this.currentUser.id,
+          x: this.currentTurn.currentPlayer.positionX,
+          y: this.currentTurn.currentPlayer.positionY,
+        },
+      });
       this.currentTurn = this.hydrateTurn();
       this.currentTurn.currentPlayer =
-        this.informations.characters[++this.currentTurn.currentPlayerIndex];
+        this.informations.characters[
+          ++this.currentTurn.currentPlayerIndex %
+            this.currentGame.players.length
+        ];
       this.$notify({
         group: "game-notification",
         text: "Vous avez bien fini votre tour.",
         type: "success",
       });
+      this.$router.push({ name: "Home" });
     },
     applyAction(type, cell) {
       if (this.currentTurn.nbActionsRestante === 0) {
@@ -237,8 +259,8 @@ export default {
           return;
         }
         const oldCellIndex = this.getCellIndexAtCoordinate(
-          this.currentTurn.currentPlayer.x,
-          this.currentTurn.currentPlayer.y
+          this.currentTurn.currentPlayer.positionX,
+          this.currentTurn.currentPlayer.positionY
         );
         this.informations.grid.cells[oldCellIndex].character = null;
         this.informations.grid.cells[oldCellIndex].status =
@@ -253,11 +275,12 @@ export default {
           constantes.cellStatus.JOUEUR;
 
         const indexCurrentPlayer = this.informations.characters.findIndex(
-          (character) =>
-            this.currentTurn.currentPlayer.user.id === character.user
+          (character) => this.currentTurn.currentPlayer.user === character.user
         );
-        this.informations.characters[indexCurrentPlayer].x = cell.x;
-        this.informations.characters[indexCurrentPlayer].y = cell.y;
+        this.informations.characters[indexCurrentPlayer].positionX =
+          this.currentTurn.currentPlayer.positionX = cell.x;
+        this.informations.characters[indexCurrentPlayer].positionY =
+          this.currentTurn.currentPlayer.positionY = cell.y;
         this.currentTurn.nbActionsRestante--;
         this.currentTurn.actions.push({
           type: constantes.actionTypes.DEPLACEMENT,
@@ -305,7 +328,7 @@ export default {
       }
     },
     getCellIndexAtCoordinate(x, y) {
-      return x * 20 + y;
+      return x * this.currentGrid.height + y;
     },
   },
 };

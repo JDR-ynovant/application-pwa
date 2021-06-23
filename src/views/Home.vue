@@ -35,9 +35,9 @@ export default {
       return this.$store.state.currentUser;
     },
   },
-  mounted () {
-    this.$store.dispatch('reinitializeCurrentState');
-  }
+  mounted() {
+    this.$store.dispatch("reinitializeCurrentState");
+  },
 };
 </script>
 <style scoped>

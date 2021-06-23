@@ -1,9 +1,9 @@
 <template>
   <div class="center-content">
-    <img 
-      src="../assets/img/licorne.png" 
-      class="m-10" 
-      @click="$router.push({name: 'Home'})"
+    <img
+      src="../assets/img/licorne.png"
+      class="m-10"
+      @click="$router.push({ name: 'Home' })"
     />
     <div v-if="!$store.state.currentUser">
       <div v-if="errors.length">
