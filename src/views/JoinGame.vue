@@ -80,6 +80,24 @@ export default {
       if (this.newUserName) {
         await this.$store.dispatch("setCurrentUser", this.newUserName);
         this.game.players.push({ id: this.newUserName });
+
+        const response = await this.$axios.post(
+          "https://candy-fight.marmog.cloud/api/games/" +
+            this.game.id +
+            "/join",
+          {},
+          {
+            headers: {
+              "X-User": this.$store.state.currentUser.id,
+            },
+          }
+        );
+        console.log(this.$store.state.currentUser.id)
+        if (response.status === 200) {
+          this.game.players.push({ id: this.$store.state.currentUser.id });
+          // this.$store.state.currentUser.games.push(this.game);
+          this.store.commit("ADD_GAME", this.game)
+        }
       } else {
         const response = await this.$axios.post(
           "https://candy-fight.marmog.cloud/api/games/" +
@@ -92,12 +110,10 @@ export default {
             },
           }
         );
-        console.log(
-          "https://candy-fight.marmog.cloud/api/games/" + this.game.id + "/join"
-        );
         if (response.status === 200) {
           this.game.players.push({ id: this.$store.state.currentUser.id });
-          this.$store.state.currentUser.games.push(this.game);
+          this.store.commit("ADD_GAME", this.game);
+          // this.$store.state.currentUser.games.push(this.game);
         }
       }
     },
