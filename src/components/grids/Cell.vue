@@ -40,9 +40,7 @@ export default {
   },
   computed: {
     isCoveredByObject() {
-      return [this.cellStatus.OBJET].includes(
-        this.cellInfos.status
-      );
+      return [this.cellStatus.OBJET].includes(this.cellInfos.status);
     },
     isCoveredByJoueur() {
       return this.cellInfos.status === this.cellStatus.JOUEUR;
