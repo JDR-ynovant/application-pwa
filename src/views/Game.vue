@@ -75,7 +75,12 @@ export default {
     },
   },
   async mounted() {
-    this.initializeGame();
+    await this.initializeGame();
+
+    if (this.currentTurn.currentPlayer) {
+      const index = this.getCellIndexAtCoordinate(this.currentTurn.currentPlayer.positionX, this.currentTurn.currentPlayer.positionY);
+      this.moveView(index);
+    }
   },
   methods: {
     async initializeGame() {
@@ -130,7 +135,7 @@ export default {
       return characters;
     },
     moveView(index) {
-      const cell = document.getElementById(
+        const cell = document.getElementById(
         `cell-${this.informations.grid.cells[index].id}`
       );
       cell.scrollIntoView({
@@ -220,23 +225,20 @@ export default {
             },
           }
         )
-        .then(() => {
+        .then((response) => {
           this.$store.dispatch("applyTurn", {
             gameId: this.gameId,
             turn,
           });
-          this.currentTurn = this.hydrateTurn();
-          this.currentTurn.currentPlayer =
-            this.informations.characters[
-              ++this.currentTurn.currentPlayerIndex %
-                this.currentGame.players.length
-            ];
+          console.log(response)
+          const game = response.data.game;
+          this.$store.commit("SET_CURRENT_GAME", { game });
           this.$notify({
             group: "game-notification",
             text: "Vous avez bien fini votre tour.",
             type: "success",
           });
-          this.$router.push({ name: "Home" });
+          setTimeout(() => this.$router.push({ name: "Home" }), 1000);
         })
         .catch(async (e) => {
           this.$notify({
