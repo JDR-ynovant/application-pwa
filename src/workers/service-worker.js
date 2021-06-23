@@ -6,8 +6,7 @@ if ("workbox" in self) {
 }
 
 self.addEventListener("push", (event) => {
-  console.log("[Service Worker] Push Received.");
-  console.log(`[Service Worker] Push had this data: "${event.data.text()}"`);
+  console.log(`[Service Worker] Push received with : "${event.data.text()}"`);
 
   const title = "Candy-Fight";
   const options = {
@@ -35,12 +34,16 @@ const handleNewSubscription = async (user) => {
     body: JSON.stringify({ subscription: subscription }),
   };
 
+  console.log("[Service Worker] Subscribe to push notifications.");
   return fetch("https://candy-fight.marmog.cloud/api/subscribe", request);
 };
 
 self.addEventListener("message", (event) => {
+  console.log(`[Service Worker] Message incoming, Kind : ${event.data.kind}`);
   switch (event.data.kind) {
     case "subscription":
       return handleNewSubscription(event.data.user);
+    case "update":
+      return self.skipWaiting();
   }
 });

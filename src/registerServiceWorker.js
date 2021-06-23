@@ -16,6 +16,13 @@ function subscribe() {
     .catch((err) => console.error(err));
 }
 
+function invokeServiceWorkerUpdateFlow(registration) {
+  if (registration.waiting) {
+    // let waiting Service Worker know it should became active
+    registration.waiting.postMessage({ kind: "update" });
+  }
+}
+
 function urlBase64ToUint8Array(base64String) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
   const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
@@ -23,7 +30,7 @@ function urlBase64ToUint8Array(base64String) {
   return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
 }
 
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
   register(`${process.env.BASE_URL}service-worker.js`, {
     async ready(registration) {
       console.log(
@@ -42,8 +49,19 @@ if (process.env.NODE_ENV === "production") {
     cached() {
       console.log("Content has been cached for offline use.");
     },
-    updatefound() {
-      console.log("New content is downloading.");
+    updatefound(registration) {
+      if (registration.installing) {
+        registration.installing.addEventListener("statechange", () => {
+          if (registration.waiting) {
+            if (navigator.serviceWorker.controller) {
+              invokeServiceWorkerUpdateFlow(registration);
+            } else {
+              // otherwise it's the first install, nothing to do
+              console.log("Service Worker initialized for the first time");
+            }
+          }
+        });
+      }
     },
     updated() {
       console.log("New content is available; please refresh.");
