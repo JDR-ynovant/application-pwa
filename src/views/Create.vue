@@ -49,12 +49,17 @@
       </p>
     </div>
     <div v-if="this.$store.state.currentUser">
-      <p>share this link :</p>
+      <p>share this code :</p>
       <p>
-        http://localhost:8080/join/{{
-          this.$store.state.currentUser.games[0].id
-        }}
+        {{ this.$store.state.currentUser.games[0].id }}
       </p>
+
+      <button
+        class="button"
+        @click="joinGame(this.$store.state.currentUser.games[0].id)"
+      >
+        Go to the game
+      </button>
     </div>
   </div>
 </template>
@@ -96,6 +101,10 @@ export default {
         this.errors.push("number players is not valid.");
       }
       e.preventDefault();
+    },
+    joinGame(idGame) {
+      console.log(idGame);
+      this.$router.push({ name: "JoinGame", params: { idGame } });
     },
   },
 };
