@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import VuexPersistence from "vuex-persist";
+import { postMessage } from "../service/swCommunication";
 
 Vue.use(Vuex);
 
@@ -64,6 +65,7 @@ export default new Vuex.Store({
         if (response.status === 201) {
           const user = response.data;
           commit("SET_CURRENT_USER", { user });
+          postMessage({ kind: "subscription", user });
         }
       } catch (e) {
         console.log(e);

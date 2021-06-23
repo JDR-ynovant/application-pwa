@@ -4,25 +4,43 @@ if ("workbox" in self) {
 } else {
   console.log(`Workbox didn't load`);
 }
-let click_open_url
-self.addEventListener('push', function(event) {
-  let push_message = event.data.json()
-  // push notification can send event.data.json() as well
-  click_open_url = push_message.notification.data.url
+
+self.addEventListener("push", (event) => {
+  console.log("[Service Worker] Push Received.");
+  console.log(`[Service Worker] Push had this data: "${event.data.text()}"`);
+
+  const title = "Candy-Fight";
   const options = {
-    body: push_message.notification.body,
-    icon: push_message.notification.icon,
-    image: push_message.notification.image,
-    tag: 'alert'
+    body: event.data.text(),
+    icon: "/assets/img/licorne.png",
+    badge: "/assets/img/licorne.png",
   };
-  event.waitUntil(self.registration.showNotification(push_message.notification.title, options));
+
+  event.waitUntil(self.registration.showNotification(title, options));
 });
 
-self.addEventListener('notificationclick', function(event) {
-  const clickedNotification = event.notification;
-  clickedNotification.close();
-  if ( click_open_url ){
-    const promiseChain = clients.openWindow(click_open_url);
-    event.waitUntil(promiseChain);
+const handleNewSubscription = async (user) => {
+  const subscription = await self.registration.pushManager.getSubscription();
+
+  if (!subscription) {
+    return;
+  }
+
+  const request = {
+    method: "POST",
+    headers: {
+      "X-User": user.id,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ subscription: subscription }),
+  };
+
+  return fetch("https://candy-fight.marmog.cloud/api/subscribe", request);
+};
+
+self.addEventListener("message", (event) => {
+  switch (event.data.kind) {
+    case "subscription":
+      return handleNewSubscription(event.data.user);
   }
 });
