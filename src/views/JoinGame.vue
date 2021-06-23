@@ -5,7 +5,14 @@
     <div v-if="this.game">
       <p>Game name : {{ this.game.name }}</p>
       <p>Game code : {{ this.game.id }}</p>
-      <p>Your are : {{ this.$store.state.currentUser ? this.$store.state.currentUser.id : "unkonwed" }}</p>
+      <p>
+        Your are :
+        {{
+          this.$store.state.currentUser
+            ? this.$store.state.currentUser.id
+            : "unkonwed"
+        }}
+      </p>
       <p>Players list :</p>
       <div v-for="player in this.game.players" :key="player.id">
         <p>{{ player ? player.id : player.name }}</p>
@@ -33,8 +40,9 @@
       <button
         class="button"
         v-else-if="
-        this.$store.state.currentUser != this.game.owner ||
-          !this.$store.state.currentUser
+          !this.$store.state.currentUser ||
+          this.$store.state.currentUser.id !== this.game.owner
+
         "
         v-on:click="createUser"
       >
@@ -95,7 +103,7 @@ export default {
       }
     },
     startGame() {
-      const gameId = this.game.id
+      const gameId = this.game.id;
       this.$router.push({ name: "Game", params: { gameId } });
     },
   },

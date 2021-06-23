@@ -60,6 +60,7 @@
       >
         Go to the game
       </button>
+
     </div>
   </div>
 </template>
@@ -102,9 +103,9 @@ export default {
       }
       e.preventDefault();
     },
-    joinGame(idGame) {
-      console.log(idGame);
-      this.$router.push({ name: "JoinGame", params: { idGame } });
+    joinGame(gameId) {
+      console.log(gameId);
+      this.$router.push({ name: "JoinGame", params: { gameId } });
     },
   },
 };
