@@ -46,6 +46,7 @@ export default {
   name: "Join",
   data: () => {
     return {
+      clickJoin: false,
       gameCode: null,
     };
   },

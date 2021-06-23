@@ -1,6 +1,10 @@
 <template>
   <div class="center-content">
-    <img src="../assets/img/licorne.png" class="m-10" />
+    <img 
+      src="../assets/img/licorne.png" 
+      class="m-10" 
+      @click="$router.push({ name: 'Home' })"
+    />
 
     <div v-if="this.game">
       <p>Game name : {{ this.game.name }}</p>
@@ -32,16 +36,17 @@
       <button
         class="button"
         v-if="this.game.players.length == this.game.playerCount"
-        @click="startGame"
+        @click="showGameList"
       >
-        Start the game !
+        Show game list !
       </button>
       <!--      <button class="button" v-if="this.$store.state.currentUser == this.game.owner">Start the game !</button>-->
       <button
         class="button"
         v-else-if="
-          !this.$store.state.currentUser ||
-          this.$store.state.currentUser.id !== this.game.owner
+          !clickJoin &&
+          (!this.$store.state.currentUser ||
+          this.$store.state.currentUser.id !== this.game.owner)
         "
         v-on:click="createUser"
       >
@@ -56,6 +61,7 @@ export default {
   name: "JoinGame",
   data: () => {
     return {
+      clickJoin: false,
       gameCode: null,
       game: null,
       newUserName: null,
@@ -115,10 +121,11 @@ export default {
           this.$store.commit("ADD_GAME", {game : this.game});
         }
       }
+      this.clickJoin = true;
     },
-    startGame() {
+    showGameList() {
       const gameId = this.game.id;
-      this.$router.push({ name: "Game", params: { gameId } });
+      this.$router.push({ name: "GameList" });
     },
   },
   created() {
