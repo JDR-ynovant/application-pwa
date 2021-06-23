@@ -1,6 +1,10 @@
-
 <template>
-  <div :id="`cell-${cellInfos.id}`" :style="`background-image: url('${cellInfos.sprite}')`" class="cell" @click="$emit('click')">
+  <div
+    :id="`cell-${cellInfos.id}`"
+    :style="`background-image: url('${cellInfos.sprite}')`"
+    class="cell"
+    @click="$emit('click')"
+  >
     <div
       v-if="isCoveredByObject"
       :style="`background-image: url('${cellInfos.objet.sprite}')`"
@@ -11,13 +15,10 @@
       :style="`background-image: url('${cellInfos.character.sprite}')`"
       class="covered"
     >
-      <div class="lifebar-background"/>
-      <div class="lifebar" :style="`width: ${largeurLifebar}%`"/>
+      <div class="lifebar-background" />
+      <div class="lifebar" :style="`width: ${largeurLifebar}%`" />
     </div>
-    <div 
-      v-else
-      class="covered"
-    />
+    <div v-else class="covered" />
   </div>
 </template>
 
@@ -46,9 +47,9 @@ export default {
     isCoveredByJoueur() {
       return this.cellInfos.status === this.cellStatus.JOUEUR;
     },
-    largeurLifebar () {
-      return this.cellInfos.character.bloodSugar * 10
-    }
+    largeurLifebar() {
+      return this.cellInfos.character.bloodSugar * 10;
+    },
   },
 };
 </script>

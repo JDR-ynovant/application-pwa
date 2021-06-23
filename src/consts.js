@@ -1,7 +1,7 @@
 export default {
   cellStatus: {
-    VIDE: "VIDE",
-    OBSTACLE: "OBSTACLE",
+    VIDE: "walkable",
+    OBSTACLE: "obstacle",
     JOUEUR: "JOUEUR",
     OBJET: "OBJET",
   },
@@ -10,5 +10,10 @@ export default {
     USAGE: "usage",
     DEPLACEMENT: "move",
     PASSE: "null",
-  }
+  },
+  objectTypes: {
+    POTION: "potion",
+    WEAPON: "weapon",
+  },
+  charactersSprite: ["/assets/img/character.png", "/assets/img/licorne.png"],
 };

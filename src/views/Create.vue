@@ -1,7 +1,11 @@
 <template>
   <div class="center-content">
-    <img src="../assets/img/licorne.png" class="m-10" />
-    <div v-if="!this.$store.state.currentUser">
+    <img
+      src="../assets/img/licorne.png"
+      class="m-10"
+      @click="$router.push({ name: 'Home' })"
+    />
+    <div v-if="!$store.state.currentUser">
       <div v-if="errors.length">
         <b>Please correct the following error(s):</b>
         <ul>
@@ -21,7 +25,7 @@
       </p>
       <p>
         <input
-          v-if="!this.$store.state.currentUser"
+          v-if="!$store.state.currentUser"
           id="name"
           v-model="name"
           type="text"
@@ -48,7 +52,7 @@
       <p>share this link :</p>
       <p>
         http://localhost:8080/join/{{
-          this.$store.state.currentUser.games[0].game.id
+          this.$store.state.currentUser.games[0].id
         }}
       </p>
     </div>

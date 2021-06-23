@@ -30,5 +30,6 @@ export default {
   padding: 10px;
   border: 0;
   border-radius: 10px;
+  cursor: pointer;
 }
 </style>
